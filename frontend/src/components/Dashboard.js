@@ -1,0 +1,170 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+function Dashboard() {
+  const [orders, setOrders] = useState([]);
+  const [totalCost, setTotalCost] = useState(0);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(''); // New state for search
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:5000/getAllOrders')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Orders fetched:', data); // Debug: Log full response
+        setOrders(data || []); // Ensure data is an array
+        const total = data.reduce((sum, order) => sum + parseFloat(order.total || 0), 0);
+        setTotalCost(total);
+      })
+      .catch(error => console.error('Error fetching orders:', error));
+  }, []);
+
+  const handleViewDetails = (order) => {
+    console.log('Selected order details:', order.order_details); // Debug: Log order_details
+    setSelectedOrder(order);
+    setShowDetailsModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowDetailsModal(false);
+    setSelectedOrder(null);
+  };
+
+  const calculateDetailsTotal = (details) => {
+    return details.reduce((sum, detail) => sum + parseFloat(detail.total_price || 0), 0).toFixed(2);
+  };
+
+  // Filter orders based on search term
+  const filteredOrders = orders.filter(order =>
+    order.customer_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="right content-page">
+      <div className="body content rows scroll-y">
+        <form className="form-horizontal">
+          <div className="box-info full" id="taskFormContainer">
+            <h2>Order Details</h2>
+            <div className="panel-body pt-0">
+              <div className="row mb-4">
+                <div className="col-sm-12">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <div className="form-group" style={{ marginBottom: '0' }}>
+                      <label>Search by Customer Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter customer name"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        style={{ maxWidth: '600px' }} // Adjust width as needed
+                      />
+                    </div>
+                    <div>
+                      <Link to="/order" className="btn btn-success pull-right" style={{ marginLeft: '5px', marginRight: '25px', textDecoration: 'none' }}>
+                        New Order
+                      </Link>
+                      <Link to="/manage-product" className="btn btn-primary pull-right" style={{ marginLeft: '5px', textDecoration: 'none' }}>
+                        Manage Products
+                      </Link>
+                    </div>
+                  </div>
+                  <table className="table orders_table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Order Number</th>
+                        <th>Customer Name</th>
+                        <th>Total Order</th>
+                        <th>Order Details</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredOrders.map(order => (
+                        <tr key={order.order_id}>
+                          <td>{new Date(order.datetime).toUTCString()}</td>
+                          <td>{order.order_id}</td>
+                          <td>{order.customer_name}</td>
+                          <td>{parseFloat(order.total).toFixed(2)} Rs</td>
+                          <td>
+                            <button
+                              type="button"
+                              className="btn btn-xs btn-info"
+                              style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
+                              onClick={() => handleViewDetails(order)}
+                            >
+                              View Details
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <td colSpan="4" style={{ textAlign: 'end' }}><b>Total</b></td>
+                        <td><b style={{ color: 'green', marginLeft: '20px' }}>₹ {totalCost.toFixed(1)}</b></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      {showDetailsModal && selectedOrder && (
+        <div className="modal fade-scale show" role="dialog" data-backdrop="static">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Order Details - Order #{selectedOrder.order_id}</h4>
+                <h4 className="modal-title">Customer: {selectedOrder.customer_name}</h4>
+              </div>
+              <div className="modal-body">
+                {selectedOrder.order_details && selectedOrder.order_details.length > 0 ? (
+                  <div className="table-container">
+                    <table className="table order-details">
+                      <thead>
+                        <tr>
+                          <th>Product Name</th>
+                          <th>Quantity</th>
+                          <th>Unit</th>
+                          <th>Price Per Unit (Rs)</th>
+                          <th>Total Price (Rs)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedOrder.order_details.map((detail, index) => (
+                          <tr key={`${detail.order_id}-${index}`}>
+                            <td>{detail.product_name || 'Unknown'}</td>
+                            <td>{detail.quantity || 0}</td>
+                            <td>{detail.uom_name || 'N/A'}</td>
+                            <td>{detail.price_per_unit ? parseFloat(detail.price_per_unit).toFixed(2) : '0.00'}</td>
+                            <td>{detail.total_price ? parseFloat(detail.total_price).toFixed(2) : '0.00'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    <p style={{ textAlign: 'end', fontWeight: 'bold', paddingRight: '20px', color: 'green' }}>
+                      <strong>Total Order Amount: </strong> ₹ {parseFloat(selectedOrder.total).toFixed(2)}
+                      {/* | <strong>Details Total: </strong> ₹ {calculateDetailsTotal(selectedOrder.order_details)} */}
+                    </p>
+                  </div>
+                ) : (
+                  <p style={{ color: 'red' }}>No order details available for this order.</p>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Dashboard;

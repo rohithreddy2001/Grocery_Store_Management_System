@@ -57,15 +57,17 @@ def get_order_details(connection, order_id):
 
     cursor.execute(query, (order_id,))
     records = []
-    for (order_id, quantity, total_price, product_name, price_per_unit, uom_name) in cursor:
-        # Recalculate total_price based on latest price_per_unit
-        recalculated_total = quantity * price_per_unit if quantity and price_per_unit else 0.0
+    for (order_id, quantity, total_price, product_name, current_price_per_unit, uom_name) in cursor:
+        quantity = float(quantity) if quantity is not None else 0.0
+        total_price = float(total_price) if total_price is not None else 0.0
+        # Calculate historical price_per_unit from total_price / quantity
+        historical_price_per_unit = (total_price / quantity) if quantity > 0 else 0.0
         records.append({
             'order_id': order_id,
             'quantity': quantity,
-            'total_price': recalculated_total,  # Use recalculated value
+            'total_price': total_price,  # Use stored total_price
             'product_name': product_name,
-            'price_per_unit': price_per_unit,
+            'price_per_unit': historical_price_per_unit,  # Use historical price
             'uom_name': uom_name
         })
 
@@ -77,7 +79,7 @@ def get_order_details(connection, order_id):
 
 def get_all_orders(connection):
     cursor = connection.cursor()
-    query = ("SELECT o.order_id, o.customer_name, o.datetime, o.total AS original_total "
+    query = ("SELECT o.order_id, o.customer_name, o.datetime, o.total "
              "FROM orders o "
              "ORDER BY o.order_id")
     cursor.execute(query)
@@ -85,25 +87,22 @@ def get_all_orders(connection):
 
     orders = {}
     for row in results:
-        order_id, customer_name, dt, original_total = row
+        order_id, customer_name, dt, total = row
         orders[order_id] = {
             'order_id': order_id,
             'customer_name': customer_name,
             'datetime': dt,
-            'total': 0.0,  # Will be recalculated
+            'total': float(total) if total is not None else 0.0,  # Use stored total
             'order_details': []
         }
 
-    # Fetch and recalculate order details
+    # Fetch order details
     for order_id in orders.keys():
         details = get_order_details(connection, order_id)
         orders[order_id]['order_details'] = details
-        # Recalculate total based on latest detail totals
-        total = sum(detail['total_price'] for detail in details)
-        orders[order_id]['total'] = total
 
     response = list(orders.values())
-    print(f"All orders with recalculated totals: {response}")  # Debug
+    print(f"All orders with stored totals: {response}")  # Debug
     return response
 
 if __name__ == '__main__':

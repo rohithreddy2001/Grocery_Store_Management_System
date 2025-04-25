@@ -51,7 +51,7 @@ function Dashboard() {
                 <div className="col-sm-12">
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                     <div className="form-group" style={{ marginBottom: '0' }}>
-                      <label>Search by Customer Name</label>
+                      <label>Search by Customer Name - {filteredOrders.length + (filteredOrders.length > 1 ? " Orders Found" : " Order Found")}</label>
                       <input
                         type="text"
                         className="form-control"

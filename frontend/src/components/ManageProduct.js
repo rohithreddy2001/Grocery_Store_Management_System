@@ -69,7 +69,7 @@ function ManageProduct() {
               <div className="col-sm-12">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <div className="form-group" style={{ marginBottom: '0' }}>
-                    <label>Search by Product Name</label>
+                    <label>Search by Product Name - {filteredProducts.length + (filteredProducts.length > 1 ? " Products Found" : " Product Found")}</label>
                     <input
                       type="text"
                       className="form-control"

@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+import os
 
 __cnx = None
 
@@ -11,10 +12,10 @@ def get_sql_connection():
         if __cnx is None or not __cnx.is_connected():
             print("Opening new MySQL connection")
             __cnx = mysql.connector.connect(
-                host="localhost",  
-                user="root",
-                password="Rohith18#",
-                database="grocery_store"
+                host=os.getenv("DB_HOST", "localhost"),
+                user=os.getenv("DB_USER", "root"),
+                password=os.getenv("DB_PASSWORD", "Rohith18#"),
+                database=os.getenv("DB_NAME", "grocery_store")
                 # connection_timeout=60  # Optional: Set a timeout
             )
             if __cnx.is_connected():
@@ -36,6 +37,3 @@ def close_sql_connection():
         __cnx.close()
         print("MySQL connection closed")
         __cnx = None
-
-# Optional: Call close_sql_connection when the app shuts down
-# This can be integrated with Flask's teardown mechanism

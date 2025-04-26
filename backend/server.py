@@ -6,6 +6,7 @@ from sql_connection import get_sql_connection, close_sql_connection
 import json
 import traceback
 
+import os
 import products_dao
 import orders_dao
 import uom_dao
@@ -161,4 +162,6 @@ def shutdown_session(exception=None):
 
 if __name__ == "__main__":
     print("Starting Python Flask Server For Grocery Store Management System")
-    app.run(debug=True, port=5000)
+    port = int(os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+    

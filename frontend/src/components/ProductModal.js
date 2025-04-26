@@ -56,7 +56,7 @@ function ProductModal({ onClose, onSave, product }) {
                     <label>Name</label>
                     <input
                       className="form-control"
-                      placeholder="Name"
+                      placeholder="Product Name"
                       name="name"
                       type="text"
                       value={formData.name}

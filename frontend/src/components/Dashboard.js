@@ -101,7 +101,7 @@ function Dashboard() {
                       ))}
                       <tr>
                         <td colSpan="4" style={{ textAlign: 'end' }}><b>Total</b></td>
-                        <td><b style={{ color: 'green', marginLeft: '20px' }}>₹ {totalCost.toFixed(1)}</b></td>
+                        <td><b style={{ color: 'green', marginLeft: '10px' }}>₹ {totalCost.toFixed(2)}</b></td>
                       </tr>
                     </tbody>
                   </table>

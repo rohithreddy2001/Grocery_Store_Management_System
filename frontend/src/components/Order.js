@@ -126,7 +126,8 @@ function Order() {
       .then(data => {
         console.log('Server response:', data); // Debug: Log response
         window.location.reload(); // Trigger reload
-      })
+        alert('Order saved successfully!');
+        })
       .catch(error => console.error('Error saving order:', error));
   };
 
@@ -187,6 +188,7 @@ function Order() {
                         {products.map(product => (
                           <option key={product.product_id} value={product.product_id}>
                             {product.name}
+                            {/* {` (Rs ${product.price_per_unit} per ${product.uom_name})`} */}
                           </option>
                         ))}
                       </select>

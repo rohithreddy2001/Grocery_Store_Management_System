@@ -5,7 +5,7 @@ class DeletionError(Exception):
 
 def get_all_products(connection):
     cursor = connection.cursor()
-    query = ("select products.product_id, products.name, products.uom_id, products.price_per_unit, uom.uom_name from products inner join uom on products.uom_id=uom.uom_id")
+    query = ("select products.product_id, products.name, products.uom_id, products.price_per_unit, uom.uom_name from products inner join uom on products.uom_id=uom.uom_id order by products.name asc")
     cursor.execute(query)
     response = []
     for (product_id, name, uom_id, price_per_unit, uom_name) in cursor:

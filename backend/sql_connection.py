@@ -13,6 +13,7 @@ def get_sql_connection():
             print("Opening new MySQL connection")
             __cnx = mysql.connector.connect(
                 host=os.getenv("DB_HOST", "localhost"),
+                port=int(os.getenv("DB_PORT", 3306)),  # Add port with default 3306
                 user=os.getenv("DB_USER", "root"),
                 password=os.getenv("DB_PASSWORD", "Rohith18#"),
                 database=os.getenv("DB_NAME", "grocery_store")

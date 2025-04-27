@@ -36,27 +36,53 @@ def get_uom():
             close_sql_connection()
             print("Connection closed")  # Debug
 
+# @app.route('/getProducts', methods=['GET'])
+# def get_products():
+#     response = {}
+#     connection = get_sql_connection()
+#     print(f"Connection status: {connection is not None and connection.is_connected()}")  # Debug connection
+#     if not connection or not connection.is_connected():
+#         response['message'] = "Failed to connect to the database"
+#         print(f"Database connection failed: {response['message']}")  # Debug
+#         return jsonify(response), 500
+#     try:
+#         response = products_dao.get_all_products(connection)
+#         print(f"Products response: {response}")  # Debug response
+#         return jsonify(response)
+#     except Exception as e:
+#         response['message'] = str(e)
+#         print(f"Error in get_products: {e} - Traceback: {traceback.format_exc()}")  # Enhanced debug
+#         return jsonify(response), 500
+#     finally:
+#         if connection and connection.is_connected():
+#             close_sql_connection()
+#             print("Connection closed")  # Debug
+
 @app.route('/getProducts', methods=['GET'])
 def get_products():
     response = {}
     connection = get_sql_connection()
-    print(f"Connection status: {connection is not None and connection.is_connected()}")  # Debug connection
+    print(f"Connection status for getProducts: {connection is not None and connection.is_connected()}")  # Debug connection
     if not connection or not connection.is_connected():
         response['message'] = "Failed to connect to the database"
-        print(f"Database connection failed: {response['message']}")  # Debug
+        print(f"Database connection failed in getProducts: {response['message']}")  # Debug
         return jsonify(response), 500
     try:
+        print("Fetching products via products_dao.get_all_products")  # Debug
         response = products_dao.get_all_products(connection)
         print(f"Products response: {response}")  # Debug response
+        if not isinstance(response, (list, dict)):  # Ensure response is valid
+            response = {'message': 'Invalid response format from get_all_products'}
+            return jsonify(response), 500
         return jsonify(response)
     except Exception as e:
-        response['message'] = str(e)
-        print(f"Error in get_products: {e} - Traceback: {traceback.format_exc()}")  # Enhanced debug
+        response['message'] = f"Error in get_products: {str(e)}"
+        print(f"Error in get_products: {str(e)} - Traceback: {traceback.format_exc()}")  # Enhanced debug
         return jsonify(response), 500
     finally:
         if connection and connection.is_connected():
             close_sql_connection()
-            print("Connection closed")  # Debug
+            print("Connection closed in getProducts")  # Debug
 
 @app.route('/insertProduct', methods=['POST'])
 def insert_product():

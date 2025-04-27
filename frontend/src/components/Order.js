@@ -13,9 +13,11 @@ function Order() {
     { product_id: '', quantity: 1, uom_id: '', price: 0, total: 0 }
   ]);
   const [grandTotal, setGrandTotal] = useState(0);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     // Fetch products
+    setLoading(true);
     fetch(`${API_BASE_URL}/getProducts`)
       .then(response => {
         if (!response.ok) {
@@ -29,7 +31,7 @@ function Order() {
           setProducts(data);
           const prices = {};
           data.forEach(product => {
-            prices[product.product_id] = product.price_per_unit;
+            prices[product.product_id] = product.price_per_unit || 0;
           });
           setProductPrices(prices);
         } else {
@@ -38,7 +40,8 @@ function Order() {
           setProductPrices({});
         }
       })
-      .catch(error => console.error('Error fetching products:', error));
+      .catch(error => console.error('Error fetching products:', error))
+      .finally(() => setLoading(false));
 
     // Fetch UOMs
     fetch(`${API_BASE_URL}/getUOM`)
@@ -54,13 +57,11 @@ function Order() {
           setUoms(data);
         } else {
           console.error('UOMs data is not an array:', data);
-          setUoms([]); // Ensure uoms is always an array
+          setUoms([]);
         }
       })
-      .catch(error => {
-        console.error('Error fetching UOMs:', error);
-        setUoms([]); // Ensure uoms is always an array on error
-      });
+      .catch(error => console.error('Error fetching UOMs:', error))
+      .finally(() => setLoading(false));
   }, []);
 
   const addItem = () => {
@@ -123,7 +124,7 @@ function Order() {
       body: `data=${JSON.stringify(requestPayload)}`
     })
       .then(response => {
-        if (!response.ok) throw new Error('Failed to save order');
+        if (!response.ok) throw new Error(`Failed to save order: ${response.statusText}`);
         return response.json();
       })
       .then(data => {
@@ -131,7 +132,10 @@ function Order() {
         window.location.reload(); // Trigger reload
         alert('Order saved successfully!');
       })
-      .catch(error => console.error('Error saving order:', error));
+      .catch(error => {
+        console.error('Error saving order:', error);
+        alert('Failed to save order. Check console for details.');
+      });
   };
 
   return (
@@ -172,6 +176,7 @@ function Order() {
                   className="btn btn-sm btn-primary"
                   type="button"
                   onClick={addItem}
+                  disabled={loading}
                 >
                   Add Product
                 </button>
@@ -186,12 +191,12 @@ function Order() {
                         className="form-control"
                         value={item.product_id}
                         onChange={(e) => handleProductChange(index, e.target.value)}
+                        disabled={loading}
                       >
                         <option value="">Select Product</option>
                         {products.map(product => (
                           <option key={product.product_id} value={product.product_id}>
                             {product.name}
-                            {/* {` (Rs ${product.price_per_unit} per ${product.uom_name})`} */}
                           </option>
                         ))}
                       </select>
@@ -214,10 +219,9 @@ function Order() {
                         className="form-control product-qty"
                         value={item.quantity}
                         onChange={(e) => handleQuantityChange(index, e.target.value)}
+                        disabled={loading}
                       />
                     </div>
-                     
-                     
                     <div className="form-group">
                       <label>Unit</label>
                       <select
@@ -225,6 +229,7 @@ function Order() {
                         className="form-control"
                         value={item.uom_id}
                         onChange={(e) => handleUomChange(index, e.target.value)}
+                        disabled={loading}
                       >
                         <option value="">Select Unit</option>
                         {Array.isArray(uoms) && uoms.length > 0 ? (
@@ -252,6 +257,7 @@ function Order() {
                         className="btn btn-sm btn-danger"
                         type="button"
                         onClick={() => removeItem(index)}
+                        disabled={loading}
                       >
                         Remove
                       </button>
@@ -280,12 +286,14 @@ function Order() {
                   className="btn btn-primary"
                   type="button"
                   onClick={handleSaveOrder}
+                  disabled={loading}
                 >
                   Save Order
                 </button>
               </div>
             </div>
           </form>
+          {loading && <div className="loading">Loading data...</div>}
         </div>
       </div>
     </div>

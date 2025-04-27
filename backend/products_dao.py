@@ -3,20 +3,43 @@ from sql_connection import get_sql_connection
 class DeletionError(Exception):
     pass
 
+# def get_all_products(connection):
+#     cursor = connection.cursor()
+#     query = ("select products.product_id, products.name, products.uom_id, products.price_per_unit, uom.uom_name from products inner join uom on products.uom_id=uom.uom_id order by products.name asc")
+#     cursor.execute(query)
+#     response = []
+#     for (product_id, name, uom_id, price_per_unit, uom_name) in cursor:
+#         response.append({
+#             'product_id': product_id,
+#             'name': name,
+#             'uom_id': uom_id,
+#             'price_per_unit': price_per_unit,
+#             'uom_name': uom_name
+#         })
+#     return response
+
 def get_all_products(connection):
-    cursor = connection.cursor()
-    query = ("select products.product_id, products.name, products.uom_id, products.price_per_unit, uom.uom_name from products inner join uom on products.uom_id=uom.uom_id order by products.name asc")
-    cursor.execute(query)
-    response = []
-    for (product_id, name, uom_id, price_per_unit, uom_name) in cursor:
-        response.append({
-            'product_id': product_id,
-            'name': name,
-            'uom_id': uom_id,
-            'price_per_unit': price_per_unit,
-            'uom_name': uom_name
-        })
-    return response
+    cursor = None
+    try:
+        print("Executing get_all_products query")  # Debug
+        cursor = connection.cursor(dictionary=True)
+        query = """
+            SELECT p.product_id, p.name, p.uom_id, p.price_per_unit, u.uom_name
+            FROM products p
+            LEFT JOIN uom u ON p.uom_id = u.uom_id
+        """
+        print(f"Executing query: {query}")  # Debug query
+        cursor.execute(query)
+        result = cursor.fetchall()
+        print(f"Query result: {result}")  # Debug result
+        return result
+    except Exception as e:
+        print(f"Error in get_all_products: {str(e)} - Traceback: {traceback.format_exc()}")  # Debug
+        raise e
+    finally:
+        if cursor:
+            cursor.close()
+            print("Cursor closed in get_all_products")  # Debug
 
 def insert_new_product(connection, product):
     cursor = connection.cursor()

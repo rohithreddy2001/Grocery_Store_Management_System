@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ProductModal from './ProductModal';
 
+const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
+
 function ManageProduct() {
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -8,7 +10,7 @@ function ManageProduct() {
   const [searchTerm, setSearchTerm] = useState(''); // New state for search
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/getProducts')
+    fetch(`${API_BASE_URL}/getProducts`)
       .then(response => response.json())
       .then(data => setProducts(data || [])) // Ensure data is an array
       .catch(error => console.error('Error fetching products:', error));
@@ -17,7 +19,7 @@ function ManageProduct() {
   const handleDelete = async (productId, productName) => {
     if (window.confirm(`Are you sure to delete ${productName} item?`)) {
       try {
-        const response = await fetch('http://127.0.0.1:5000/deleteProduct', {
+        const response = await fetch(`${API_BASE_URL}/deleteProduct`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: `product_id=${productId}`
@@ -48,7 +50,7 @@ function ManageProduct() {
   const handleModalSave = () => {
     setShowModal(false);
     setSelectedProduct(null);
-    fetch('http://127.0.0.1:5000/getProducts')
+    fetch(`${API_BASE_URL}/getProducts`)
       .then(response => response.json())
       .then(data => setProducts(data || [])) // Ensure data is an array
       .catch(error => console.error('Error fetching products:', error));

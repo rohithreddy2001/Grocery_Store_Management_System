@@ -1,59 +1,71 @@
-# backend/server.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from sql_connection import get_sql_connection, close_sql_connection
 import json
 import traceback
-
 import os
+
+# Import DAOs
 import products_dao
 import orders_dao
 import uom_dao
 
 app = Flask(__name__)
-# Enable CORS for the Vercel frontend domain
-CORS(app, resources={r"/*": {"origins": "https://grocery-store-management-system-livid.vercel.app"}})
+# Enable CORS for the Vercel frontend domain with explicit debug
+CORS(app, resources={r"/*": {"origins": "https://grocery-store-management-system-livid.vercel.app"}}, supports_credentials=True)
 
 @app.route('/getUOM', methods=['GET'])
 def get_uom():
     response = {}
     connection = get_sql_connection()
+    print(f"Connection status: {connection is not None and connection.is_connected()}")  # Debug connection
     if not connection or not connection.is_connected():
         response['message'] = "Failed to connect to the database"
+        print(f"Database connection failed: {response['message']}")  # Debug
         return jsonify(response), 500
     try:
         response = uom_dao.get_uoms(connection)
+        print(f"UOM response: {response}")  # Debug response
         return jsonify(response)
     except Exception as e:
         response['message'] = str(e)
+        print(f"Error in get_uom: {e} - Traceback: {traceback.format_exc()}")  # Enhanced debug
         return jsonify(response), 500
     finally:
         if connection and connection.is_connected():
             close_sql_connection()
+            print("Connection closed")  # Debug
 
 @app.route('/getProducts', methods=['GET'])
 def get_products():
     response = {}
     connection = get_sql_connection()
+    print(f"Connection status: {connection is not None and connection.is_connected()}")  # Debug connection
     if not connection or not connection.is_connected():
         response['message'] = "Failed to connect to the database"
+        print(f"Database connection failed: {response['message']}")  # Debug
         return jsonify(response), 500
     try:
         response = products_dao.get_all_products(connection)
+        print(f"Products response: {response}")  # Debug response
         return jsonify(response)
     except Exception as e:
         response['message'] = str(e)
+        print(f"Error in get_products: {e} - Traceback: {traceback.format_exc()}")  # Enhanced debug
         return jsonify(response), 500
     finally:
         if connection and connection.is_connected():
             close_sql_connection()
+            print("Connection closed")  # Debug
 
 @app.route('/insertProduct', methods=['POST'])
 def insert_product():
     response = {}
     connection = get_sql_connection()
+    print(f"Connection status: {connection is not None and connection.is_connected()}")  # Debug connection
     if not connection or not connection.is_connected():
         response['message'] = "Failed to connect to the database"
+        print(f"Database connection failed: {response['message']}")  # Debug
         return jsonify(response), 500
     try:
         request_payload = json.loads(request.form['data'])
@@ -62,17 +74,21 @@ def insert_product():
         return jsonify(response)
     except Exception as e:
         response['message'] = str(e)
+        print(f"Error in insert_product: {e} - Traceback: {traceback.format_exc()}")  # Enhanced debug
         return jsonify(response), 500
     finally:
         if connection and connection.is_connected():
             close_sql_connection()
+            print("Connection closed")  # Debug
 
 @app.route('/updateProduct', methods=['POST'])
 def update_product():
     response = {}
     connection = get_sql_connection()
+    print(f"Connection status: {connection is not None and connection.is_connected()}")  # Debug connection
     if not connection or not connection.is_connected():
         response['message'] = "Failed to connect to the database"
+        print(f"Database connection failed: {response['message']}")  # Debug
         return jsonify(response), 500
     try:
         request_payload = json.loads(request.form['data'])
@@ -81,17 +97,21 @@ def update_product():
         return jsonify(response)
     except Exception as e:
         response['message'] = str(e)
+        print(f"Error in update_product: {e} - Traceback: {traceback.format_exc()}")  # Enhanced debug
         return jsonify(response), 500
     finally:
         if connection and connection.is_connected():
             close_sql_connection()
+            print("Connection closed")  # Debug
 
 @app.route('/getAllOrders', methods=['GET'])
 def get_all_orders():
     response = {}
     connection = get_sql_connection()
+    print(f"Connection status: {connection is not None and connection.is_connected()}")  # Debug connection
     if not connection or not connection.is_connected():
         response['message'] = "Failed to connect to the database"
+        print(f"Database connection failed: {response['message']}")  # Debug
         return jsonify(response), 500
     try:
         response = orders_dao.get_all_orders(connection)
@@ -105,13 +125,16 @@ def get_all_orders():
     finally:
         if connection and connection.is_connected():
             close_sql_connection()
+            print("Connection closed")  # Debug
 
 @app.route('/insertOrder', methods=['POST'])
 def insert_order():
     response = {}
     connection = get_sql_connection()
+    print(f"Connection status: {connection is not None and connection.is_connected()}")  # Debug connection
     if not connection or not connection.is_connected():
         response['message'] = "Failed to connect to the database"
+        print(f"Database connection failed: {response['message']}")  # Debug
         return jsonify(response), 500
     try:
         data = request.form.get('data')
@@ -133,13 +156,16 @@ def insert_order():
     finally:
         if connection and connection.is_connected():
             close_sql_connection()
+            print("Connection closed")  # Debug
 
 @app.route('/deleteProduct', methods=['POST'])
 def delete_product():
     response = {}
     connection = get_sql_connection()
+    print(f"Connection status: {connection is not None and connection.is_connected()}")  # Debug connection
     if not connection or not connection.is_connected():
         response['message'] = "Failed to connect to the database"
+        print(f"Database connection failed: {response['message']}")  # Debug
         return jsonify(response), 500
     try:
         return_id = products_dao.delete_product(connection, request.form['product_id'])
@@ -149,18 +175,21 @@ def delete_product():
         return jsonify(response), 400
     except Exception as e:
         response['message'] = str(e)
+        print(f"Error in delete_product: {e} - Traceback: {traceback.format_exc()}")  # Enhanced debug
         return jsonify(response), 500
     finally:
         if connection and connection.is_connected():
             close_sql_connection()
+            print("Connection closed")  # Debug
         return jsonify(response)
 
 # Add this at the bottom to handle app shutdown
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     close_sql_connection()
+    print("App context shutdown, connection closed")  # Debug
 
 if __name__ == "__main__":
     print("Starting Python Flask Server For Grocery Store Management System")
     port = int(os.getenv("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)  # Enable debug mode for more logs

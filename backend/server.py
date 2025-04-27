@@ -12,7 +12,7 @@ import orders_dao
 import uom_dao
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, resources={r"/*": {"origins": "https://grocery-store-management-system-livid.vercel.app/"}})
 
 @app.route('/getUOM', methods=['GET'])
 def get_uom():

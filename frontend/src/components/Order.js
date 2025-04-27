@@ -14,10 +14,12 @@ function Order() {
   ]);
   const [grandTotal, setGrandTotal] = useState(0);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState(null); // Add error state
 
   useEffect(() => {
     // Fetch products
     setLoading(true);
+    setError(null); // Reset error state
     fetch(`${API_BASE_URL}/getProducts`)
       .then(response => {
         if (!response.ok) {
@@ -38,9 +40,13 @@ function Order() {
           console.error('Products data is not an array:', data);
           setProducts([]);
           setProductPrices({});
+          setError('Failed to load products: Invalid data format');
         }
       })
-      .catch(error => console.error('Error fetching products:', error))
+      .catch(error => {
+        console.error('Error fetching products:', error);
+        setError(`Failed to load products: ${error.message}`);
+      })
       .finally(() => setLoading(false));
 
     // Fetch UOMs
@@ -58,9 +64,13 @@ function Order() {
         } else {
           console.error('UOMs data is not an array:', data);
           setUoms([]);
+          setError('Failed to load units: Invalid data format');
         }
       })
-      .catch(error => console.error('Error fetching UOMs:', error))
+      .catch(error => {
+        console.error('Error fetching UOMs:', error);
+        setError(`Failed to load units: ${error.message}`);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -169,6 +179,12 @@ function Order() {
                 />
               </div>
             </div>
+
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
 
             <div className="form-section product-section">
               <div className="product-header">

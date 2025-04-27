@@ -165,6 +165,7 @@ function Order() {
                   placeholder="Enter customer name"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
+                  disabled={loading}
                 />
               </div>
             </div>

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+// Define the API base URL for the Render backend
+const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
+
 function Order() {
   const [customerName, setCustomerName] = useState('');
   const [products, setProducts] = useState([]);
@@ -13,7 +16,7 @@ function Order() {
 
   useEffect(() => {
     // Fetch products
-    fetch('http://127.0.0.1:5000/getProducts') // Use full URL
+    fetch(`${API_BASE_URL}/getProducts`)
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -38,7 +41,7 @@ function Order() {
       .catch(error => console.error('Error fetching products:', error));
 
     // Fetch UOMs
-    fetch('http://127.0.0.1:5000/getUOM') // Use full URL
+    fetch(`${API_BASE_URL}/getUOM`)
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -114,7 +117,7 @@ function Order() {
       }))
     };
     console.log('Saving order:', requestPayload); // Debug: Log payload
-    fetch('http://127.0.0.1:5000/insertOrder', { // Use full URL
+    fetch(`${API_BASE_URL}/insertOrder`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `data=${JSON.stringify(requestPayload)}`
@@ -127,7 +130,7 @@ function Order() {
         console.log('Server response:', data); // Debug: Log response
         window.location.reload(); // Trigger reload
         alert('Order saved successfully!');
-        })
+      })
       .catch(error => console.error('Error saving order:', error));
   };
 
@@ -213,8 +216,8 @@ function Order() {
                         onChange={(e) => handleQuantityChange(index, e.target.value)}
                       />
                     </div>
-                    &nbsp;
-                    &nbsp;
+                     
+                     
                     <div className="form-group">
                       <label>Unit</label>
                       <select

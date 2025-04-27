@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+// Define the API base URL for the Render backend
+const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
+
 function Dashboard() {
+  
   const [orders, setOrders] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -9,7 +13,7 @@ function Dashboard() {
   const [searchTerm, setSearchTerm] = useState(''); // New state for search
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/getAllOrders')
+    fetch(`${API_BASE_URL}/getAllOrders`)
       .then(response => response.json())
       .then(data => {
         console.log('Orders fetched:', data); // Debug: Log full response

@@ -32,7 +32,7 @@ function ProductModal({ onClose, onSave, product }) {
       ...(isUpdateMode && { product_id: formData.product_id })
     };
     const endpoint = isUpdateMode ? 'updateProduct' : 'insertProduct';
-    fetch(`http://127.0.0.1:5000/${endpoint}`, {
+    fetch(`${API_BASE_URL}/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `data=${JSON.stringify(requestPayload)}`

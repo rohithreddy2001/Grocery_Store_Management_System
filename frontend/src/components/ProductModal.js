@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+// Define the API base URL for the Render backend
+const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
+
 function ProductModal({ onClose, onSave, product }) {
   const isUpdateMode = !!product;
   const [formData, setFormData] = useState({
@@ -11,7 +14,7 @@ function ProductModal({ onClose, onSave, product }) {
   const [uoms, setUoms] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/getUOM')
+    fetch(`${API_BASE_URL}/getUOM`, { mode: 'cors' })
       .then(response => response.json())
       .then(data => setUoms(data))
       .catch(error => console.error('Error fetching UOMs:', error));

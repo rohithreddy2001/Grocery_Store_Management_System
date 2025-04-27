@@ -20,7 +20,7 @@ function Order() {
     // Fetch products
     setLoading(true);
     setError(null); // Reset error state
-    fetch(`${API_BASE_URL}/getProducts`)
+    fetch(`${API_BASE_URL}/getProducts`, { mode: 'cors' }) // Explicitly set CORS mode
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -50,7 +50,7 @@ function Order() {
       .finally(() => setLoading(false));
 
     // Fetch UOMs
-    fetch(`${API_BASE_URL}/getUOM`)
+    fetch(`${API_BASE_URL}/getUOM`, { mode: 'cors' }) // Explicitly set CORS mode
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -131,7 +131,8 @@ function Order() {
     fetch(`${API_BASE_URL}/insertOrder`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `data=${JSON.stringify(requestPayload)}`
+      body: `data=${JSON.stringify(requestPayload)}`,
+      mode: 'cors' // Explicitly set CORS mode
     })
       .then(response => {
         if (!response.ok) throw new Error(`Failed to save order: ${response.statusText}`);
@@ -144,7 +145,8 @@ function Order() {
       })
       .catch(error => {
         console.error('Error saving order:', error);
-        alert('Failed to save order. Check console for details.');
+        setError(`Failed to save order: ${error.message}`);
+        alert('Failed to save order. Check the page for details.');
       });
   };
 

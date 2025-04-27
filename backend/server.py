@@ -1,4 +1,3 @@
-
 # backend/server.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -12,6 +11,7 @@ import orders_dao
 import uom_dao
 
 app = Flask(__name__)
+# Enable CORS for the Vercel frontend domain
 CORS(app, resources={r"/*": {"origins": "https://grocery-store-management-system-livid.vercel.app"}})
 
 @app.route('/getUOM', methods=['GET'])
@@ -164,4 +164,3 @@ if __name__ == "__main__":
     print("Starting Python Flask Server For Grocery Store Management System")
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-    

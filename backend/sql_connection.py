@@ -8,16 +8,22 @@ def get_sql_connection():
     global __cnx
     print("Attempting to get MySQL connection")
 
+    # Debug: Print environment variables
+    print(f"DB_HOST: {os.getenv('DB_HOST', 'localhost')}")
+    print(f"DB_PORT: {os.getenv('DB_PORT', 3306)}")
+    print(f"DB_USER: {os.getenv('DB_USER', 'root')}")
+    print(f"DB_NAME: {os.getenv('DB_NAME', 'grocery_store')}")
+    print(f"DB_PASSWORD: {'*' * len(os.getenv('DB_PASSWORD', 'Rohith18#'))}")  # Mask password
+
     try:
         if __cnx is None or not __cnx.is_connected():
             print("Opening new MySQL connection")
             __cnx = mysql.connector.connect(
                 host=os.getenv("DB_HOST", "localhost"),
-                port=int(os.getenv("DB_PORT", 3306)),  # Add port with default 3306
+                port=int(os.getenv("DB_PORT", 3306)),
                 user=os.getenv("DB_USER", "root"),
                 password=os.getenv("DB_PASSWORD", "Rohith18#"),
                 database=os.getenv("DB_NAME", "grocery_store")
-                # connection_timeout=60  # Optional: Set a timeout
             )
             if __cnx.is_connected():
                 print("Successfully connected to MySQL database")

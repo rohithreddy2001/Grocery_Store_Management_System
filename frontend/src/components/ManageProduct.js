@@ -79,23 +79,23 @@ function ManageProduct() {
     }
   };
 
-  const handleSaveProduct = () => {
+  const handleSaveProduct = async () => {
     setShowModal(false);
     setLoading(true);
-    fetch(`${API_BASE_URL}/getProducts`, { mode: 'cors' })
-      .then(response => response.json())
-      .then(data => {
-        setProducts(data);
-        setFilteredProducts(data);
-        setLoading(false); // Moved here to hide loading immediately after data fetch
-        setSuccess(selectedProduct ? 'Product updated successfully!' : 'Product added successfully!');
-        setTimeout(() => setSuccess(null), 3000);
-      })
-      .catch(err => {
-        setError(err.message);
-        setLoading(false);
-        setTimeout(() => setError(null), 3000);
-      });
+    try {
+      const response = await fetch(`${API_BASE_URL}/getProducts`, { mode: 'cors' });
+      if (!response.ok) throw new Error('Failed to fetch products');
+      const data = await response.json();
+      setProducts(data);
+      setFilteredProducts(data);
+      setLoading(false); // Set loading to false immediately after data is received
+      setSuccess(selectedProduct ? 'Product updated successfully!' : 'Product added successfully!');
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false); // Ensure loading stops even on error
+      setTimeout(() => setError(null), 3000);
+    }
   };
 
   return (
@@ -114,7 +114,7 @@ function ManageProduct() {
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{ maxWidth: '300px' }}
+                  style={{ maxWidth: '600px' }}
                 />
               </div>
             </div>

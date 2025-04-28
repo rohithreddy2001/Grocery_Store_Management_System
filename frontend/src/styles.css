@@ -10,6 +10,7 @@ body {
   background-position: center;
   color: #1e293b;
   font-size: 14px;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .container {
@@ -17,6 +18,8 @@ body {
   max-width: 1280px;
   margin: 0 auto;
   padding: 10px;
+  overflow-x: hidden; /* Ensure container doesn't cause horizontal scroll */
+  box-sizing: border-box;
 }
 
 .header {
@@ -29,6 +32,7 @@ body {
   opacity: 0.9;
   border-radius: 8px;
   max-height: 80px;
+  max-width: 100%;
 }
 
 .loading {
@@ -63,17 +67,15 @@ body {
 }
 
 .notification {
-  position: fixed;
-  top: 10px;
-  right: 10px;
+  position: relative; /* Changed to relative for placement within container */
   padding: 10px 16px;
   border-radius: 6px;
   color: #ffffff;
   font-size: 0.85rem;
   font-weight: 500;
-  z-index: 1000;
-  animation: slideIn 0.3s ease-in-out;
-  max-width: 90%;
+  z-index: 10;
+  max-width: 100%;
+  margin-bottom: 10px; /* Space below notification */
 }
 
 .notification.success {
@@ -176,10 +178,13 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   margin-top: 10px;
   opacity: 0.95;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .box-info {
   margin-bottom: 16px;
+  position: relative; /* Allow notifications to be positioned relative to this */
 }
 
 .box-info h2 {
@@ -207,7 +212,9 @@ body {
 }
 
 .table-container {
-  overflow-x: auto;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .table th,
@@ -216,6 +223,7 @@ body {
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
   font-size: 0.85rem;
+  box-sizing: border-box;
 }
 
 .table th {
@@ -238,7 +246,8 @@ body {
 }
 
 .table th, .table td {
-  min-width: 80px;
+  min-width: 60px; /* Reduced to avoid forcing overflow */
+  max-width: 25%; /* Ensure columns don't expand too much */
 }
 
 .table.orders_table th:nth-child(1),
@@ -319,8 +328,9 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
-  width: 100%;
-  margin-bottom: 8px;
+  max-width: 100%; /* Prevent buttons from exceeding container */
+  margin: 4px 0; /* Add spacing to avoid overlap */
+  box-sizing: border-box;
 }
 
 .btn:active {
@@ -407,6 +417,8 @@ body {
   border: 1px solid #d1d5db;
   border-radius: 5px;
   transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  max-width: 100%; /* Prevent overflow */
 }
 
 .form-control:focus {
@@ -425,6 +437,25 @@ body {
   font-size: 0.85rem;
   font-weight: 700;
   color: #182d4b;
+}
+
+.search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.search-bar input {
+  flex: 1;
+  min-width: 120px;
+  max-width: 100%;
+}
+
+.search-bar button {
+  flex-shrink: 0;
 }
 
 .modal {
@@ -475,6 +506,7 @@ body {
   border: none;
   border-radius: 6px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  max-width: 100%;
 }
 
 .modal-header {
@@ -509,6 +541,7 @@ body {
   flex-wrap: wrap;
   margin-right: -8px;
   margin-left: -8px;
+  max-width: 100%;
 }
 
 .col-sm-12,
@@ -520,6 +553,7 @@ body {
   width: 100%;
   padding-right: 8px;
   padding-left: 8px;
+  box-sizing: border-box;
 }
 
 .product-price,
@@ -543,6 +577,7 @@ body {
   border-radius: 6px;
   padding: 12px;
   margin-bottom: 12px;
+  max-width: 100%;
 }
 
 .product-section {
@@ -667,7 +702,7 @@ body {
 
   .btn {
     width: auto;
-    margin-bottom: 0;
+    margin: 0 4px;
   }
 
   .pull-right {

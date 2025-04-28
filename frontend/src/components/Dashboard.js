@@ -46,8 +46,10 @@ function Dashboard() {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [searchTerm, setSearchTerm] = useState(''); // New state for search
+  const [loading, setLoading] = useState(true); // New state for loading
 
   useEffect(() => {
+    setLoading(true); // Set loading to true when fetch starts
     fetch(`${API_BASE_URL}/getAllOrders`)
       .then(response => response.json())
       .then(data => {
@@ -56,7 +58,8 @@ function Dashboard() {
         const total = data.reduce((sum, order) => sum + parseFloat(order.total || 0), 0);
         setTotalCost(total);
       })
-      .catch(error => console.error('Error fetching orders:', error));
+      .catch(error => console.error('Error fetching orders:', error))
+      .finally(() => setLoading(false)); // Set loading to false when fetch completes or fails
   }, []);
 
   const handleViewDetails = (order) => {
@@ -82,6 +85,11 @@ function Dashboard() {
   return (
     <div className="right content-page">
       <div className="body content rows scroll-y">
+        {loading && (
+          <div className="loading">
+            <span>Loading...</span>
+          </div>
+        )}
         <form className="form-horizontal">
           <div className="box-info full" id="taskFormContainer">
             <h2>Order Details</h2>

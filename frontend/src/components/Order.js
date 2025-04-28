@@ -4,6 +4,23 @@ import { Link } from 'react-router-dom';
 // Define the API base URL for the Render backend
 const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
+// Retry fetch with a delay
+const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      if (i === retries - 1) throw error; // Last retry failed
+      console.log(`Retrying fetch for ${url} (attempt ${i + 1}/${retries})...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+};
+
 function Order() {
   const [customerName, setCustomerName] = useState('');
   const [products, setProducts] = useState([]);
@@ -17,17 +34,13 @@ function Order() {
   const [error, setError] = useState(null); // Add error state
 
   useEffect(() => {
-    // Fetch products
-    setLoading(true);
-    setError(null); // Reset error state
-    fetch(`${API_BASE_URL}/getProducts`, { mode: 'cors' }) // Explicitly set CORS mode
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null); // Reset error state
+
+      // Fetch products
+      try {
+        const data = await fetchWithRetry(`${API_BASE_URL}/getProducts`, { mode: 'cors' });
         console.log('Fetched products:', data); // Debug
         if (Array.isArray(data)) {
           setProducts(data);
@@ -42,22 +55,14 @@ function Order() {
           setProductPrices({});
           setError('Failed to load products: Invalid data format');
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching products:', error);
         setError(`Failed to load products: ${error.message}`);
-      })
-      .finally(() => setLoading(false));
+      }
 
-    // Fetch UOMs
-    fetch(`${API_BASE_URL}/getUOM`, { mode: 'cors' }) // Explicitly set CORS mode
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
+      // Fetch UOMs
+      try {
+        const data = await fetchWithRetry(`${API_BASE_URL}/getUOM`, { mode: 'cors' });
         console.log('Fetched UOMs:', data); // Debug
         if (Array.isArray(data)) {
           setUoms(data);
@@ -66,12 +71,15 @@ function Order() {
           setUoms([]);
           setError('Failed to load units: Invalid data format');
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching UOMs:', error);
         setError(`Failed to load units: ${error.message}`);
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const addItem = () => {

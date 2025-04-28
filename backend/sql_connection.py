@@ -6,39 +6,40 @@ __cnx = None
 
 def get_sql_connection():
     global __cnx
-    print("Attempting to get MySQL connection")
-    print(f"DB_HOST: {os.getenv('DB_HOST', 'localhost')}")
-    print(f"DB_PORT: {os.getenv('DB_PORT', 3306)}")
-    print(f"DB_USER: {os.getenv('DB_USER', 'root')}")
-    print(f"DB_NAME: {os.getenv('DB_NAME', 'grocery_store')}")
-    print(f"DB_PASSWORD: {'*' * len(os.getenv('DB_PASSWORD', 'Rohith18#'))}")
-
+    print("Attempting to get MySQL connection")  # Debug
     try:
-        if __cnx is None or not __cnx.is_connected():
-            print("Opening new MySQL connection")
-            __cnx = mysql.connector.connect(
-                host=os.getenv("DB_HOST", "localhost"),
-                port=int(os.getenv("DB_PORT", 3306)),
-                user=os.getenv("DB_USER", "root"),
-                password=os.getenv("DB_PASSWORD", "Rohith18#"),
-                database=os.getenv("DB_NAME", "grocery_store")
-            )
-            if __cnx.is_connected():
-                print("Successfully connected to MySQL database")
-            else:
-                print("Failed to verify new connection")
-                __cnx = None
+        # Check if connection exists and is valid
+        if __cnx is not None and __cnx.is_connected():
+            print("Reusing existing MySQL connection")  # Debug
+            return __cnx
+
+        # If connection is None or not connected, establish a new one
+        print("Opening new MySQL connection")  # Debug
+        __cnx = mysql.connector.connect(
+            host=os.getenv("DB_HOST", "localhost"),
+            port=int(os.getenv("DB_PORT", 3306)),
+            user=os.getenv("DB_USER", "root"),
+            password=os.getenv("DB_PASSWORD", "Rohith18#"),
+            database=os.getenv("DB_NAME", "grocery_store")
+        )
+        if __cnx.is_connected():
+            print("Successfully connected to MySQL database")  # Debug
         else:
-            print("Reusing existing MySQL connection")
+            print("Failed to verify new connection")  # Debug
+            __cnx = None
         return __cnx
     except Error as e:
-        print(f"Error connecting to MySQL database: {e}")
-        __cnx = None
+        print(f"Error connecting to MySQL database: {e}")  # Debug
+        __cnx = None  # Reset connection on failure
         return None
 
 def close_sql_connection():
     global __cnx
     if __cnx and __cnx.is_connected():
-        __cnx.close()
-        print("MySQL connection closed")
-        __cnx = None
+        try:
+            __cnx.close()
+            print("MySQL connection closed")  # Debug
+        except Error as e:
+            print(f"Error closing MySQL connection: {e}")  # Debug
+        finally:
+            __cnx = None  # Reset connection

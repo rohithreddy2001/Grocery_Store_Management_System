@@ -190,7 +190,7 @@ function Dashboard() {
                     </p>
                   </div>
                 ) : (
-                  <p style={{ color: 'red' }}>No order details available for this order.</p>
+                  <p style={{ color: ' red' }}>No order details available for this order.</p>
                 )}
               </div>
               <div className="modal-footer">

@@ -6,13 +6,25 @@ const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
 // Function to format datetime as stored (already in IST)
 const formatDateTime = (dateString) => {
-  // Parse the datetime string (e.g., "2025-04-28 15:41:31")
-  const [datePart, timePart] = dateString.split(' ');
-  const [year, month, day] = datePart.split('-').map(Number);
-  const [hour, minute, second] = timePart.split(':').map(Number);
+  if (!dateString) return 'N/A';
 
-  // Create a Date object in local time (IST), without treating the input as UTC
-  const date = new Date(year, month - 1, day, hour, minute, second);
+  // Try parsing the date string directly
+  let date = new Date(dateString);
+
+  // Fallback: If parsing fails (e.g., due to format), try manual parsing
+  if (isNaN(date.getTime())) {
+    try {
+      const [datePart, timePart] = dateString.split(' ');
+      const [year, month, day] = datePart.split('-').map(Number);
+      const [hour, minute, second] = timePart.split(':').map(Number);
+      date = new Date(year, month - 1, day, hour, minute, second);
+    } catch (e) {
+      console.error('Failed to parse datetime:', dateString, e);
+      return 'Invalid Date';
+    }
+  }
+
+  if (isNaN(date.getTime())) return 'Invalid Date';
 
   const options = {
     day: '2-digit',

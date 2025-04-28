@@ -106,8 +106,8 @@ function ManageProduct() {
           {error && <div className="notification error">{error}</div>}
           {success && <div className="notification success">{success}</div>}
           <div className="row">
-            <div className="col-sm-12">
-              <div className="search-bar">
+            <div className="col-sm-9">
+              <div className="form-group">
                 <input
                   type="text"
                   className="form-control"
@@ -115,16 +115,21 @@ function ManageProduct() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
+              </div>
+            </div>
+            <div className="col-sm-3">
+              <div className="form-group pull-right">
                 <button
                   type="button"
-                  className="btn btn-primary btn-sm"
+                  className="btn btn-primary"
                   onClick={handleSearch}
                 >
                   Search
                 </button>
+                 
                 <button
                   type="button"
-                  className="btn btn-success btn-sm"
+                  className="btn btn-success"
                   onClick={handleAddProduct}
                 >
                   Add New Product
@@ -158,7 +163,7 @@ function ManageProduct() {
                           >
                             Update
                           </button>
-                          &nbsp;
+                           
                           <button
                             type="button"
                             className="btn btn-xs btn-danger"

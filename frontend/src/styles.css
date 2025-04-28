@@ -67,7 +67,7 @@ body {
 }
 
 .notification {
-  position: relative; /* Changed to relative for placement within container */
+  position: relative; /* Position within parent container */
   padding: 10px 16px;
   border-radius: 6px;
   color: #ffffff;
@@ -184,7 +184,7 @@ body {
 
 .box-info {
   margin-bottom: 16px;
-  position: relative; /* Allow notifications to be positioned relative to this */
+  position: relative; /* Context for notification positioning */
 }
 
 .box-info h2 {
@@ -212,7 +212,7 @@ body {
 }
 
 .table-container {
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden; /* Prevent table horizontal scrolling */
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -246,8 +246,8 @@ body {
 }
 
 .table th, .table td {
-  min-width: 60px; /* Reduced to avoid forcing overflow */
-  max-width: 25%; /* Ensure columns don't expand too much */
+  min-width: 60px; /* Reduced to avoid overflow */
+  max-width: 25%; /* Prevent columns from expanding too much */
 }
 
 .table.orders_table th:nth-child(1),
@@ -329,7 +329,7 @@ body {
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
   max-width: 100%; /* Prevent buttons from exceeding container */
-  margin: 4px 0; /* Add spacing to avoid overlap */
+  margin: 4px 2px; /* Add spacing to avoid overlap */
   box-sizing: border-box;
 }
 
@@ -446,6 +446,7 @@ body {
   align-items: center;
   max-width: 100%;
   box-sizing: border-box;
+  margin-bottom: 12px;
 }
 
 .search-bar input {

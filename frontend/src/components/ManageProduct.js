@@ -93,17 +93,12 @@ function ManageProduct() {
             <span>Loading...</span>
           </div>
         )}
-        {notification && (
-          <div className={`notification ${notification.type}`}>
-            {notification.message}
-          </div>
-        )}
         <div className="box-info full" id="taskFormContainer">
           <h2>Manage Products</h2>
           <div className="panel-body pt-0">
             <div className="row mb-4">
               <div className="col-sm-12">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', position: 'relative' }}>
                   <div className="form-group" style={{ marginBottom: '0' }}>
                     <label>Search by Product Name - {filteredProducts.length + (filteredProducts.length > 1 ? " Products Found" : " Product Found")}</label>
                     <input
@@ -115,7 +110,12 @@ function ManageProduct() {
                       style={{maxWidth: '600px' }} // Adjust width as needed
                     />
                   </div>
-                  <div>
+                  <div style={{ position: 'relative' }}>
+                    {notification && (
+                      <div className={`notification ${notification.type}`}>
+                        {notification.message}
+                      </div>
+                    )}
                     <button
                       type="button"
                       className="btn btn-sm btn-success pull-right"

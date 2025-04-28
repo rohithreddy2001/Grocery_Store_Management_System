@@ -61,9 +61,9 @@ body {
 }
 
 .notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
+  position: absolute;
+  top: -50px; /* Position above the button */
+  right: 28px; /* Align with the button's margin-right */
   padding: 12px 20px;
   border-radius: 6px;
   color: #ffffff;
@@ -71,6 +71,7 @@ body {
   font-weight: 500;
   z-index: 1000;
   animation: slideIn 0.3s ease-in-out;
+  width: max-content; /* Adjust width to fit content */
 }
 
 .notification.success {
@@ -82,8 +83,8 @@ body {
 }
 
 @keyframes slideIn {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 .grocery-store-icon{

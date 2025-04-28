@@ -41,13 +41,14 @@ function ManageProduct() {
     fetchData();
   }, []);
 
-  const handleSearch = () => {
+  // Automatic search on input change
+  useEffect(() => {
     const query = searchQuery.toLowerCase();
     const filtered = products.filter(product =>
       product.name.toLowerCase().includes(query)
     );
     setFilteredProducts(filtered);
-  };
+  }, [searchQuery, products]);
 
   const handleAddProduct = () => {
     setSelectedProduct(null);
@@ -119,14 +120,6 @@ function ManageProduct() {
             </div>
             <div className="col-sm-3">
               <div className="form-group pull-right">
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleSearch}
-                >
-                  Search
-                </button>
-                 
                 <button
                   type="button"
                   className="btn btn-success"

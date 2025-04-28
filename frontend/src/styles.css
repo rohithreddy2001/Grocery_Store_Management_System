@@ -109,7 +109,9 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: none;
+  display: flex; /* Show by default, toggle will adjust */
+  flex-direction: column; /* Stack vertically on mobile */
+  width: 100%;
 }
 
 .navbar-nav.active {
@@ -127,15 +129,17 @@ body {
 
 .grocery-store-navbar {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Stack on mobile */
   align-items: flex-start;
   gap: 10px;
+  width: 100%;
 }
 
 .grocery-store-title {
   font-size: 1.5rem;
   font-weight: bold;
   color: rgb(33, 120, 219);
+  margin: 0;
 }
 
 .breadcrumb {
@@ -145,6 +149,7 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .breadcrumb li {
@@ -167,7 +172,8 @@ body {
   font-size: 1.2rem;
   color: #475569;
   cursor: pointer;
-  display: block;
+  display: block; /* Always show on mobile */
+  margin-bottom: 10px;
 }
 
 .right.content-page {
@@ -203,8 +209,7 @@ body {
 
 .table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse; /* Changed from separate to collapse for better mobile fit */
   background-color: white;
   border-radius: 6px;
   overflow: hidden;
@@ -224,6 +229,7 @@ body {
   border-bottom: 1px solid #e2e8f0;
   font-size: 0.85rem;
   box-sizing: border-box;
+  word-wrap: break-word; /* Allow text to wrap on mobile */
 }
 
 .table th {
@@ -331,6 +337,7 @@ body {
   max-width: 100%; /* Prevent buttons from exceeding container */
   margin: 4px 2px; /* Add spacing to avoid overlap */
   box-sizing: border-box;
+  white-space: normal; /* Allow text wrapping on buttons */
 }
 
 .btn:active {
@@ -659,6 +666,92 @@ body {
   width: 100%;
 }
 
+@media (max-width: 575px) {
+  .container {
+    padding: 5px;
+  }
+
+  .header {
+    padding: 5px;
+    max-height: 100px;
+  }
+
+  .grocery-store-icon {
+    width: 50px;
+    height: 40px;
+  }
+
+  .grocery-store-title {
+    font-size: 1.2rem;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .grocery-store-navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .breadcrumb {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .button-menu-mobile {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+
+  .right.content-page {
+    padding: 8px;
+    margin-top: 5px;
+  }
+
+  .box-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+    word-wrap: break-word;
+  }
+
+  .btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    margin: 2px;
+  }
+
+  .form-control {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .form-group {
+    margin-bottom: 8px;
+  }
+
+  .form-group label {
+    font-size: 0.75rem;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+}
+
 @media (min-width: 576px) {
   body {
     font-size: 15px;
@@ -844,6 +937,7 @@ body {
   .navbar-nav {
     display: flex;
     align-items: center;
+    flex-direction: row; /* Horizontal on desktop */
   }
 
   .navbar-nav.active {
@@ -853,6 +947,7 @@ body {
     width: auto;
     box-shadow: none;
     padding: 0;
+    flex-direction: row;
   }
 
   .grocery-store-navbar {

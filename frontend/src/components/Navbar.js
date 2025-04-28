@@ -18,7 +18,7 @@ function Navbar() {
       <div className="navbar navbar-default" role="navigation">
         <div className="container">
           <div className="navbar-collapse collapse">
-            <ul className={`nav navbar-nav visible-lg visible-md limit-chars ${isMenuOpen ? 'active' : ''}`}>
+            <ul className={`nav navbar-nav ${isMenuOpen ? 'active' : ''}`}>
               <div className="grocery-store-navbar">
                 <img src={headerLogo} alt="Grocery Store Icon" className="grocery-store-icon" />
                 <h2 className="grocery-store-title">Grocery Store Management System</h2>

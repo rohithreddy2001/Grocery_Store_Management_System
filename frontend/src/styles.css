@@ -94,7 +94,7 @@ body {
 .grocery-store-icon {
   width: 50px;
   height: 40px;
-  margin: 0 auto;
+  margin: 0;
   display: block;
   border-radius: 10px;
 }
@@ -131,7 +131,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   width: 100%;
 }
 
@@ -141,6 +141,7 @@ body {
   color: rgb(33, 120, 219);
   margin: 0;
   text-align: center;
+  flex: 1;
 }
 
 .breadcrumb {
@@ -960,6 +961,23 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 20px;
+    width: 100%;
+  }
+
+  .grocery-store-icon {
+    margin: 0;
+  }
+
+  .grocery-store-title {
+    flex: 1;
+    text-align: center;
+    margin: 0 20px;
+  }
+
+  .breadcrumb {
+    flex-direction: row;
+    gap: 10px;
+    margin: 0;
   }
 
   .breadcrumb i {

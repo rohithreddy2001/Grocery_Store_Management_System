@@ -8,20 +8,17 @@ const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 const formatDateTime = (dateString) => {
   if (!dateString) return 'N/A';
 
-  // Try parsing the date string directly
-  let date = new Date(dateString);
-
-  // Fallback: If parsing fails (e.g., due to format), try manual parsing
-  if (isNaN(date.getTime())) {
-    try {
-      const [datePart, timePart] = dateString.split(' ');
-      const [year, month, day] = datePart.split('-').map(Number);
-      const [hour, minute, second] = timePart.split(':').map(Number);
-      date = new Date(year, month - 1, day, hour, minute, second);
-    } catch (e) {
-      console.error('Failed to parse datetime:', dateString, e);
-      return 'Invalid Date';
-    }
+  // Parse the datetime string manually to avoid UTC interpretation
+  let date;
+  try {
+    const [datePart, timePart] = dateString.split(' ');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hour, minute, second] = timePart.split(':').map(Number);
+    // Create a Date object as local time (IST), without UTC interpretation
+    date = new Date(year, month - 1, day, hour, minute, second);
+  } catch (e) {
+    console.error('Failed to parse datetime:', dateString, e);
+    return 'Invalid Date';
   }
 
   if (isNaN(date.getTime())) return 'Invalid Date';

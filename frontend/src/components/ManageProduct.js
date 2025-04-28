@@ -115,6 +115,7 @@ function ManageProduct() {
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{ maxWidth: '600px' }}
                 />
               </div>
             </div>

@@ -173,7 +173,7 @@ function ManageProduct() {
               </div>
             </div>
           </div>
-          {/* {loading && <div className="loading">Loading...</div>} */}
+          {loading && <div className="loading">Loading...</div>}
           {showModal && (
             <ProductModal
               onClose={() => setShowModal(false)}

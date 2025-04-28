@@ -31,7 +31,7 @@ body {
   z-index: 100;
   opacity: 0.9;
   border-radius: 8px;
-  max-height: 80px;
+  max-height: 120px;
   max-width: 100%;
 }
 
@@ -67,7 +67,7 @@ body {
 }
 
 .notification {
-  position: relative; /* Position within parent container */
+  position: relative;
   padding: 10px 16px;
   border-radius: 6px;
   color: #ffffff;
@@ -75,7 +75,7 @@ body {
   font-weight: 500;
   z-index: 10;
   max-width: 100%;
-  margin-bottom: 10px; /* Space below notification */
+  margin-bottom: 10px;
 }
 
 .notification.success {
@@ -92,11 +92,11 @@ body {
 }
 
 .grocery-store-icon {
-  width: 60px;
-  height: 50px;
-  margin-right: 6px;
-  border-radius: 15px;
-  margin-bottom: 8px;
+  width: 50px;
+  height: 40px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 10px;
 }
 
 .navbar {
@@ -109,8 +109,8 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex; /* Show by default, toggle will adjust */
-  flex-direction: column; /* Stack vertically on mobile */
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
@@ -118,7 +118,7 @@ body {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 70px;
+  top: 100px;
   left: 0;
   width: 100%;
   background-color: #ffffff;
@@ -129,31 +129,32 @@ body {
 
 .grocery-store-navbar {
   display: flex;
-  flex-direction: column; /* Stack on mobile */
-  align-items: flex-start;
-  gap: 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   width: 100%;
 }
 
 .grocery-store-title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: rgb(33, 120, 219);
   margin: 0;
+  text-align: center;
 }
 
 .breadcrumb {
   display: flex;
   flex-direction: row;
-  gap: 6px;
+  gap: 10px;
   list-style: none;
   padding: 0;
   margin: 0;
-  flex-wrap: wrap; /* Allow wrapping on small screens */
+  justify-content: center;
 }
 
 .breadcrumb li {
-  margin-right: 8px;
+  margin-right: 0;
 }
 
 .breadcrumb a {
@@ -172,8 +173,8 @@ body {
   font-size: 1.2rem;
   color: #475569;
   cursor: pointer;
-  display: block; /* Always show on mobile */
-  margin-bottom: 10px;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .right.content-page {
@@ -190,7 +191,7 @@ body {
 
 .box-info {
   margin-bottom: 16px;
-  position: relative; /* Context for notification positioning */
+  position: relative;
 }
 
 .box-info h2 {
@@ -209,7 +210,7 @@ body {
 
 .table {
   width: 100%;
-  border-collapse: collapse; /* Changed from separate to collapse for better mobile fit */
+  border-collapse: collapse;
   background-color: white;
   border-radius: 6px;
   overflow: hidden;
@@ -217,7 +218,7 @@ body {
 }
 
 .table-container {
-  overflow-x: hidden; /* Prevent table horizontal scrolling */
+  overflow-x: hidden;
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -229,7 +230,7 @@ body {
   border-bottom: 1px solid #e2e8f0;
   font-size: 0.85rem;
   box-sizing: border-box;
-  word-wrap: break-word; /* Allow text to wrap on mobile */
+  word-wrap: break-word;
 }
 
 .table th {
@@ -252,8 +253,8 @@ body {
 }
 
 .table th, .table td {
-  min-width: 60px; /* Reduced to avoid overflow */
-  max-width: 25%; /* Prevent columns from expanding too much */
+  min-width: 60px;
+  max-width: 25%;
 }
 
 .table.orders_table th:nth-child(1),
@@ -334,10 +335,10 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
-  max-width: 100%; /* Prevent buttons from exceeding container */
-  margin: 4px 2px; /* Add spacing to avoid overlap */
+  max-width: 100%;
+  margin: 4px 2px;
   box-sizing: border-box;
-  white-space: normal; /* Allow text wrapping on buttons */
+  white-space: normal;
 }
 
 .btn:active {
@@ -425,7 +426,7 @@ body {
   border-radius: 5px;
   transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
-  max-width: 100%; /* Prevent overflow */
+  max-width: 100%;
 }
 
 .form-control:focus {
@@ -677,29 +678,33 @@ body {
   }
 
   .grocery-store-icon {
-    width: 50px;
-    height: 40px;
+    width: 40px;
+    height: 30px;
   }
 
   .grocery-store-title {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .navbar-nav {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .grocery-store-navbar {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 5px;
   }
 
   .breadcrumb {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .breadcrumb i {
+    font-size: 24px;
   }
 
   .button-menu-mobile {
@@ -767,8 +772,8 @@ body {
   }
 
   .grocery-store-icon {
-    width: 70px;
-    height: 60px;
+    width: 60px;
+    height: 50px;
   }
 
   .grocery-store-title {
@@ -926,8 +931,8 @@ body {
   }
 
   .grocery-store-icon {
-    width: 80px;
-    height: 70px;
+    width: 70px;
+    height: 60px;
   }
 
   .grocery-store-title {
@@ -937,7 +942,7 @@ body {
   .navbar-nav {
     display: flex;
     align-items: center;
-    flex-direction: row; /* Horizontal on desktop */
+    flex-direction: row;
   }
 
   .navbar-nav.active {
@@ -955,6 +960,10 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 20px;
+  }
+
+  .breadcrumb i {
+    font-size: 32px;
   }
 
   .button-menu-mobile {

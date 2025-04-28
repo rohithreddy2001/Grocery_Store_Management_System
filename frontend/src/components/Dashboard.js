@@ -4,11 +4,16 @@ import { Link } from 'react-router-dom';
 // Define the API base URL for the Render backend
 const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
-// Function to format UTC datetime for display in IST
-const formatDateTimeForIST = (utcDateString) => {
-  const date = new Date(utcDateString);
-  
-  // Format the date to IST using toLocaleString with Asia/Kolkata timezone
+// Function to format datetime as stored (already in IST)
+const formatDateTime = (dateString) => {
+  // Parse the datetime string (e.g., "2025-04-28 15:41:31")
+  const [datePart, timePart] = dateString.split(' ');
+  const [year, month, day] = datePart.split('-').map(Number);
+  const [hour, minute, second] = timePart.split(':').map(Number);
+
+  // Create a Date object in local time (IST), without treating the input as UTC
+  const date = new Date(year, month - 1, day, hour, minute, second);
+
   const options = {
     day: '2-digit',
     month: 'short',
@@ -16,9 +21,9 @@ const formatDateTimeForIST = (utcDateString) => {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    timeZone: 'Asia/Kolkata', // Display in IST
     hour12: false // Use 24-hour format (e.g., 14:00 for 2:00 PM)
   };
+  // Format the date without timezone conversion (already in IST)
   return date.toLocaleString('en-IN', options).replace(/,/, '');
 };
 
@@ -104,7 +109,7 @@ function Dashboard() {
                     <tbody>
                       {filteredOrders.map(order => (
                         <tr key={order.order_id}>
-                          <td>{formatDateTimeForIST(order.datetime)}</td>
+                          <td>{formatDateTime(order.datetime)}</td>
                           <td>{order.order_id}</td>
                           <td>{order.customer_name}</td>
                           <td>{parseFloat(order.total).toFixed(2)} Rs</td>

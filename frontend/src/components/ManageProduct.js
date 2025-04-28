@@ -126,7 +126,6 @@ function ManageProduct() {
                     </button>
                   </div>
                 </div>
-                // ManageProduct.js (replace table section only)
                 <div className="table-container">
                   <table className="table products-table">
                     <thead>

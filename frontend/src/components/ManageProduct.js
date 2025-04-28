@@ -7,8 +7,9 @@ function ManageProduct() {
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(''); // New state for search
-  const [loading, setLoading] = useState(true); // New state for loading
+  const [searchTerm, setSearchTerm] = useState(''); // State for search
+  const [loading, setLoading] = useState(true); // State for loading
+  const [notification, setNotification] = useState(null); // State for notifications
 
   useEffect(() => {
     setLoading(true); // Set loading to true when fetch starts
@@ -18,6 +19,12 @@ function ManageProduct() {
       .catch(error => console.error('Error fetching products:', error))
       .finally(() => setLoading(false)); // Set loading to false when fetch completes or fails
   }, []);
+
+  // Function to show notification and auto-hide after 3 seconds
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000); // Hide after 3 seconds
+  };
 
   const handleDelete = async (productId, productName) => {
     if (window.confirm(`Are you sure to delete ${productName} item?`)) {
@@ -32,10 +39,11 @@ function ManageProduct() {
           alert(result.error);
         } else {
           setProducts(products.filter(product => product.product_id !== productId));
+          showNotification(`Product "${productName}" deleted successfully.`, 'success'); // Show delete notification
         }
       } catch (error) {
         console.error('Error deleting product:', error);
-        alert('An error occurred while deleting the product.');
+        showNotification('An error occurred while deleting the product.', 'error'); // Show error notification
       }
     }
   };
@@ -52,11 +60,24 @@ function ManageProduct() {
 
   const handleModalSave = () => {
     setShowModal(false);
+    const isUpdate = !!selectedProduct; // Check if it's an update or new product
+    const productName = selectedProduct ? selectedProduct.name : 'New Product';
     setSelectedProduct(null);
     fetch(`${API_BASE_URL}/getProducts`)
       .then(response => response.json())
-      .then(data => setProducts(data || [])) // Ensure data is an array
-      .catch(error => console.error('Error fetching products:', error));
+      .then(data => {
+        setProducts(data || []); // Ensure data is an array
+        showNotification(
+          isUpdate 
+            ? `Product "${productName}" updated successfully.` 
+            : 'New product added successfully.', 
+          'success'
+        ); // Show add/update notification
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+        showNotification('An error occurred while refreshing the product list.', 'error'); // Show error notification
+      });
   };
 
   // Filter products based on search term
@@ -70,6 +91,11 @@ function ManageProduct() {
         {loading && (
           <div className="loading">
             <span>Loading...</span>
+          </div>
+        )}
+        {notification && (
+          <div className={`notification ${notification.type}`}>
+            {notification.message}
           </div>
         )}
         <div className="box-info full" id="taskFormContainer">

@@ -60,6 +60,32 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1000;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+.notification.success {
+  background-color: #22c55e; /* Same as btn-success */
+}
+
+.notification.error {
+  background-color: #ef4444; /* Same as btn-danger */
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
 .grocery-store-icon{
   width: 80px;
   height: 70px;

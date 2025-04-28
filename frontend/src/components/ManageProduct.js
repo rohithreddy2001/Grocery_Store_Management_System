@@ -126,44 +126,47 @@ function ManageProduct() {
                     </button>
                   </div>
                 </div>
-                <table className="table products-table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Unit</th>
-                      <th>Price Per Unit</th>
-                      <th style={{ width: '150px' }}>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredProducts.map(product => (
-                      <tr key={product.product_id}>
-                        <td>{product.name}</td>
-                        <td>{product.uom_name}</td>
-                        <td>{product.price_per_unit}</td>
-                        <td>
-                          <button
-                            type="button"
-                            className="btn btn-xs btn-warning"
-                            style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
-                            onClick={() => handleUpdate(product)}
-                          >
-                            Update
-                          </button>
-                            
-                          <button
-                            type="button"
-                            className="btn btn-xs btn-danger"
-                            style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
-                            onClick={() => handleDelete(product.product_id, product.name)}
-                          >
-                            Delete
-                          </button>
-                        </td>
+                // ManageProduct.js (replace table section only)
+                <div className="table-container">
+                  <table className="table products-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Unit</th>
+                        <th>Price Per Unit</th>
+                        <th style={{ width: '150px' }}>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {filteredProducts.map(product => (
+                        <tr key={product.product_id}>
+                          <td>{product.name}</td>
+                          <td>{product.uom_name}</td>
+                          <td>{product.price_per_unit}</td>
+                          <td>
+                            <button
+                              type="button"
+                              className="btn btn-xs btn-warning"
+                              style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
+                              onClick={() => handleUpdate(product)}
+                            >
+                              Update
+                            </button>
+                              
+                            <button
+                              type="button"
+                              className="btn btn-xs btn-danger"
+                              style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
+                              onClick={() => handleDelete(product.product_id, product.name)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>

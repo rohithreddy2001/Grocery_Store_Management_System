@@ -1,6 +1,6 @@
+// ProductModal.js
 import React, { useState, useEffect } from 'react';
 
-// Define the API base URL for the Render backend
 const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
 function ProductModal({ onClose, onSave, product }) {
@@ -53,51 +53,43 @@ function ProductModal({ onClose, onSave, product }) {
           <div className="modal-body">
             <form id="productForm">
               <input type="hidden" name="id" value={formData.product_id} />
-              <div className="row">
-                <div className="col-sm-12">
-                  <div className="form-group">
-                    <label>Name</label>
-                    <input
-                      className="form-control"
-                      placeholder="Product Name"
-                      name="name"
-                      type="text"
-                      value={formData.name}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="col-sm-12">
-                  <div className="form-group">
-                    <label>Unit</label>
-                    <select
-                      name="uom_id"
-                      className="form-control"
-                      value={formData.uom_id}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Unit</option>
-                      {uoms.map(uom => (
-                        <option key={uom.uom_id} value={uom.uom_id}>
-                          {uom.uom_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="col-sm-12">
-                  <div className="form-group">
-                    <label>Price Per Unit</label>
-                    <input
-                      className="form-control"
-                      placeholder="Price Per Unit"
-                      name="price_per_unit"
-                      type="text"
-                      value={formData.price_per_unit}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
+              <div className="form-group">
+                <label>Name</label>
+                <input
+                  className="form-control"
+                  placeholder="Product Name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Unit</label>
+                <select
+                  name="uom_id"
+                  className="form-control"
+                  value={formData.uom_id}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Unit</option>
+                  {uoms.map(uom => (
+                    <option key={uom.uom_id} value={uom.uom_id}>
+                      {uom.uom_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Price Per Unit</label>
+                <input
+                  className="form-control"
+                  placeholder="Price Per Unit"
+                  name="price_per_unit"
+                  type="text"
+                  value={formData.price_per_unit}
+                  onChange={handleChange}
+                />
               </div>
             </form>
           </div>

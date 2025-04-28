@@ -117,41 +117,43 @@ function Dashboard() {
                       </Link>
                     </div>
                   </div>
-                  <table className="table orders_table">
-                    <thead>
-                      <tr>
-                        <th>Date</th>
-                        <th>Order Number</th>
-                        <th>Customer Name</th>
-                        <th>Total Order</th>
-                        <th>Order Details</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredOrders.map(order => (
-                        <tr key={order.order_id}>
-                          <td>{formatDateTime(order.datetime)}</td>
-                          <td>{order.order_id}</td>
-                          <td>{order.customer_name}</td>
-                          <td>{parseFloat(order.total).toFixed(2)} Rs</td>
-                          <td>
-                            <button
-                              type="button"
-                              className="btn btn-xs btn-info"
-                              style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
-                              onClick={() => handleViewDetails(order)}
-                            >
-                              View Details
-                            </button>
-                          </td>
+                  <div className="table-container">
+                    <table className="table orders_table">
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Order Number</th>
+                          <th>Customer Name</th>
+                          <th>Total Order</th>
+                          <th>Order Details</th>
                         </tr>
-                      ))}
-                      <tr>
-                        <td colSpan="4" style={{ textAlign: 'end' }}><b>Total</b></td>
-                        <td><b style={{ color: 'green', marginLeft: '10px' }}>₹ {totalCost.toFixed(2)}</b></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {filteredOrders.map(order => (
+                          <tr key={order.order_id}>
+                            <td>{formatDateTime(order.datetime)}</td>
+                            <td>{order.order_id}</td>
+                            <td>{order.customer_name}</td>
+                            <td>{parseFloat(order.total).toFixed(2)} Rs</td>
+                            <td>
+                              <button
+                                type="button"
+                                className="btn btn-xs btn-info"
+                                style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
+                                onClick={() => handleViewDetails(order)}
+                              >
+                                View Details
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                        <tr>
+                          <td colSpan="4" style={{ textAlign: 'end' }}><b>Total</b></td>
+                          <td><b style={{ color: 'green', marginLeft: '10px' }}>₹ {totalCost.toFixed(2)}</b></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>

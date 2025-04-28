@@ -1,10 +1,9 @@
+// Order.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-// Define the API base URL for the Render backend
 const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
-// Retry fetch with a delay
 const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
   for (let i = 0; i < retries; i++) {
     try {
@@ -14,7 +13,7 @@ const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
       }
       return await response.json();
     } catch (error) {
-      if (i === retries - 1) throw error; // Last retry failed
+      if (i === retries - 1) throw error;
       console.log(`Retrying fetch for ${url} (attempt ${i + 1}/${retries})...`);
       await new Promise(resolve => setTimeout(resolve, delay));
     }
@@ -24,24 +23,23 @@ const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
 function Order() {
   const [customerName, setCustomerName] = useState('');
   const [products, setProducts] = useState([]);
-  const [uoms, setUoms] = useState([]); // Initialize as empty array
+  const [uoms, setUoms] = useState([]);
   const [productPrices, setProductPrices] = useState({});
   const [items, setItems] = useState([
     { product_id: '', quantity: 1, uom_id: '', price: 0, total: 0 }
   ]);
   const [grandTotal, setGrandTotal] = useState(0);
-  const [loading, setLoading] = useState(true); // Add loading state
-  const [error, setError] = useState(null); // Add error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      setError(null); // Reset error state
+      setError(null);
 
-      // Fetch products
       try {
         const data = await fetchWithRetry(`${API_BASE_URL}/getProducts`, { mode: 'cors' });
-        console.log('Fetched products:', data); // Debug
+        console.log('Fetched products:', data);
         if (Array.isArray(data)) {
           setProducts(data);
           const prices = {};
@@ -60,10 +58,9 @@ function Order() {
         setError(`Failed to load products: ${error.message}`);
       }
 
-      // Fetch UOMs
       try {
         const data = await fetchWithRetry(`${API_BASE_URL}/getUOM`, { mode: 'cors' });
-        console.log('Fetched UOMs:', data); // Debug
+        console.log('Fetched UOMs:', data);
         if (Array.isArray(data)) {
           setUoms(data);
         } else {
@@ -135,20 +132,20 @@ function Order() {
         total_price: item.total
       }))
     };
-    console.log('Saving order:', requestPayload); // Debug: Log payload
+    console.log('Saving order:', requestPayload);
     fetch(`${API_BASE_URL}/insertOrder`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `data=${JSON.stringify(requestPayload)}`,
-      mode: 'cors' // Explicitly set CORS mode
+      mode: 'cors'
     })
       .then(response => {
         if (!response.ok) throw new Error(`Failed to save order: ${response.statusText}`);
         return response.json();
       })
       .then(data => {
-        console.log('Server response:', data); // Debug: Log response
-        window.location.reload(); // Trigger reload
+        console.log('Server response:', data);
+        window.location.reload();
         alert('Order saved successfully!');
       })
       .catch(error => {
@@ -168,7 +165,7 @@ function Order() {
               <button
                 type="button"
                 className="btn btn-xs btn-danger"
-                style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
+                style={{ fontSize: '14px', fontWeight: '500' }}
               >
                 Exit Page
               </button>
@@ -208,7 +205,7 @@ function Order() {
                   Add Product
                 </button>
               </div>
-              <div className="product-rows">
+              <div className="product-rows-container">
                 {items.map((item, index) => (
                   <div className="product-row" key={index}>
                     <div className="form-group">
@@ -249,8 +246,6 @@ function Order() {
                         disabled={loading}
                       />
                     </div>
-                    &nbsp;
-                    &nbsp;
                     <div className="form-group">
                       <label>Unit</label>
                       <select

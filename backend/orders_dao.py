@@ -103,10 +103,12 @@ def get_all_orders(connection):
     orders = {}
     for row in results:
         order_id, customer_name, dt, total = row
+        # Convert datetime to string in YYYY-MM-DD HH:mm:ss format
+        datetime_str = dt.strftime('%Y-%m-%d %H:%M:%S') if dt else None
         orders[order_id] = {
             'order_id': order_id,
             'customer_name': customer_name,
-            'datetime': dt,
+            'datetime': datetime_str,
             'total': float(total) if total is not None else 0.0,  # Use stored total
             'order_details': []
         }

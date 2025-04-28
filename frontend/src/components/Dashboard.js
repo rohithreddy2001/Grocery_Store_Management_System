@@ -109,7 +109,7 @@ function Dashboard() {
                       />
                     </div>
                     <div>
-                      <Link to="/order" className="btn btn-success pull-right" style={{ marginLeft: '5px', marginRight: '25px', textDecoration: 'none' }}>
+                      <Link to="/order" className="btn btn-success pull-right" style={{ marginLeft: '5px', textDecoration: 'none' }}>
                         New Order
                       </Link>
                       <Link to="/manage-product" className="btn btn-primary pull-right" style={{ marginLeft: '5px', textDecoration: 'none' }}>

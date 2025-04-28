@@ -8,12 +8,15 @@ function ManageProduct() {
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState(''); // New state for search
+  const [loading, setLoading] = useState(true); // New state for loading
 
   useEffect(() => {
+    setLoading(true); // Set loading to true when fetch starts
     fetch(`${API_BASE_URL}/getProducts`)
       .then(response => response.json())
       .then(data => setProducts(data || [])) // Ensure data is an array
-      .catch(error => console.error('Error fetching products:', error));
+      .catch(error => console.error('Error fetching products:', error))
+      .finally(() => setLoading(false)); // Set loading to false when fetch completes or fails
   }, []);
 
   const handleDelete = async (productId, productName) => {
@@ -64,6 +67,11 @@ function ManageProduct() {
   return (
     <div className="right content-page">
       <div className="body content rows scroll-y">
+        {loading && (
+          <div className="loading">
+            <span>Loading...</span>
+          </div>
+        )}
         <div className="box-info full" id="taskFormContainer">
           <h2>Manage Products</h2>
           <div className="panel-body pt-0">

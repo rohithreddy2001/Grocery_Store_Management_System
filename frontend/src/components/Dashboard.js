@@ -4,26 +4,22 @@ import { Link } from 'react-router-dom';
 // Define the API base URL for the Render backend
 const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
-// Function to convert UTC datetime to IST
-const convertUTCToIST = (utcDateString) => {
+// Function to format UTC datetime for display in IST
+const formatDateTimeForIST = (utcDateString) => {
   const date = new Date(utcDateString);
-  // IST is UTC+5:30, so add 5 hours and 30 minutes (5.5 hours = 5.5 * 60 * 60 * 1000 milliseconds)
-  const istOffset = 5.5 * 60 * 60 * 1000;
-  const istDate = new Date(date.getTime() + istOffset);
   
-  // Format the date to a readable string (e.g., "Sat 19 Apr 2025 12:34:52 IST")
+  // Format the date to IST using toLocaleString with Asia/Kolkata timezone
   const options = {
-    weekday: 'short',
     day: '2-digit',
     month: 'short',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    timeZone: 'Asia/Kolkata', // Ensure timezone is explicitly set
-    hour12: false // 24-hour format; set to true for 12-hour format with AM/PM
+    timeZone: 'Asia/Kolkata', // Display in IST
+    hour12: false // Use 24-hour format (e.g., 14:00 for 2:00 PM)
   };
-  return istDate.toLocaleString('en-IN', options).replace(/,/, '') + ' IST';
+  return date.toLocaleString('en-IN', options).replace(/,/, '');
 };
 
 function Dashboard() {
@@ -108,7 +104,7 @@ function Dashboard() {
                     <tbody>
                       {filteredOrders.map(order => (
                         <tr key={order.order_id}>
-                          <td>{convertUTCToIST(order.datetime)}</td>
+                          <td>{formatDateTimeForIST(order.datetime)}</td>
                           <td>{order.order_id}</td>
                           <td>{order.customer_name}</td>
                           <td>{parseFloat(order.total).toFixed(2)} Rs</td>

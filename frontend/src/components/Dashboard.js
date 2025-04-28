@@ -8,20 +8,24 @@ const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 const formatDateTime = (dateString) => {
   if (!dateString) return 'N/A';
 
-  // Parse the datetime string manually to avoid UTC interpretation
-  let date;
-  try {
-    const [datePart, timePart] = dateString.split(' ');
-    const [year, month, day] = datePart.split('-').map(Number);
-    const [hour, minute, second] = timePart.split(':').map(Number);
-    // Create a Date object as local time (IST), without UTC interpretation
-    date = new Date(year, month - 1, day, hour, minute, second);
-  } catch (e) {
-    console.error('Failed to parse datetime:', dateString, e);
+  // Use regex to parse the datetime string in "YYYY-MM-DD HH:mm:ss" format
+  const regex = /^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})$/;
+  const match = dateString.match(regex);
+
+  if (!match) {
+    console.error('Failed to parse datetime with regex:', dateString);
     return 'Invalid Date';
   }
 
-  if (isNaN(date.getTime())) return 'Invalid Date';
+  const [, year, month, day, hour, minute, second] = match.map(Number);
+  
+  // Create a Date object as local time (IST), without UTC interpretation
+  const date = new Date(year, month - 1, day, hour, minute, second);
+
+  if (isNaN(date.getTime())) {
+    console.error('Invalid Date object created:', dateString);
+    return 'Invalid Date';
+  }
 
   const options = {
     day: '2-digit',

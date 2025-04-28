@@ -1,4 +1,3 @@
-// ManageProduct.js
 import React, { useState, useEffect } from 'react';
 import ProductModal from './ProductModal';
 
@@ -88,9 +87,9 @@ function ManageProduct() {
       .then(data => {
         setProducts(data);
         setFilteredProducts(data);
+        setLoading(false); // Moved here to hide loading immediately after data fetch
         setSuccess(selectedProduct ? 'Product updated successfully!' : 'Product added successfully!');
         setTimeout(() => setSuccess(null), 3000);
-        setLoading(false);
       })
       .catch(err => {
         setError(err.message);
@@ -115,7 +114,7 @@ function ManageProduct() {
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{ maxWidth: '600px' }}
+                  style={{ maxWidth: '300px' }}
                 />
               </div>
             </div>

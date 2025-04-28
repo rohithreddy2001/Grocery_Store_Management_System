@@ -26,7 +26,7 @@ def get_all_products(connection):
         query = """
             SELECT p.product_id, p.name, p.uom_id, p.price_per_unit, u.uom_name
             FROM products p
-            LEFT JOIN uom u ON p.uom_id = u.uom_id
+            LEFT JOIN uom u ON p.uom_id = u.uom_id order by p.name asc
         """
         print(f"Executing query: {query}")  # Debug query
         cursor.execute(query)

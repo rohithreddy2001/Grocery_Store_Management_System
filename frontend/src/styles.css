@@ -235,9 +235,9 @@ body {
 }
 
 .table th {
-  background-color: orange;
+  background-color: #345b34;
   font-weight: 600;
-  color: #000000;
+  color: #ffffff;
   text-transform: uppercase;
 }
 

@@ -121,9 +121,9 @@ function ManageProduct() {
                       style={{ maxWidth: '100%' }}
                     />
                   </div>
-                  <div>
-                    {error && <div className="notification error">{error}</div>}
-                    {success && <div className="notification success">{success}</div>}
+                  <div style={{ position: 'relative', marginLeft: '8px' }}>
+                    {error && <div className="notification error" style={{ top: '-60px' }}>{error}</div>}
+                    {success && <div className="notification success" style={{ top: '-60px' }}>{success}</div>}
                     <button
                       type="button"
                       className="btn btn-success"
@@ -149,11 +149,11 @@ function ManageProduct() {
                         <td>{product.name}</td>
                         <td>{product.uom_name}</td>
                         <td>{product.price_per_unit}</td>
-                        <td>
+                        <td className="action-buttons">
                           <button
                             type="button"
                             className="btn btn-warning"
-                            style={{ marginLeft: '0px', fontSize: '0.75rem', fontWeight: '500', width: '70px' }}
+                            style={{ fontSize: '0.75rem', fontWeight: '500', width: '70px' }}
                             onClick={() => handleUpdate(product)}
                           >
                             Update
@@ -161,7 +161,7 @@ function ManageProduct() {
                           <button
                             type="button"
                             className="btn btn-danger"
-                            style={{ marginLeft: '8px', fontSize: '0.75rem', fontWeight: '500', width: '70px' }}
+                            style={{ fontSize: '0.75rem', fontWeight: '500', width: '70px' }}
                             onClick={() => handleDelete(product.product_id, product.name)}
                           >
                             Delete

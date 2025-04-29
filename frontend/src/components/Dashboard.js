@@ -45,31 +45,30 @@ function Dashboard() {
   const [totalCost, setTotalCost] = useState(0);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(''); // New state for search
-  const [loading, setLoading] = useState(true); // New state for loading
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setLoading(true); // Set loading to true when fetch starts
+    setLoading(true);
     setError(null);
     fetch(`${API_BASE_URL}/getAllOrders`)
       .then(response => response.json())
       .then(data => {
-        console.log('Orders fetched:', data); // Debug: Log full response
-        setOrders(data || []); // Ensure data is an array
+        console.log('Orders fetched:', data);
+        setOrders(data || []);
         const total = data.reduce((sum, order) => sum + parseFloat(order.total || 0), 0);
         setTotalCost(total);
       })
       .catch(error => {
         setError(error.message);
-        // console.error('Error fetching orders:', error); // Debug: Log error
-        // setTimeout(() => setError(null), 3000);
+        setTimeout(() => setError(null), 3000);
       })      
-      .finally(() => setLoading(false)); // Set loading to false when fetch completes or fails
+      .finally(() => setLoading(false));
   }, []);
 
   const handleViewDetails = (order) => {
-    console.log('Selected order details:', order.order_details); // Debug: Log order_details
+    console.log('Selected order details:', order.order_details);
     setSelectedOrder(order);
     setShowDetailsModal(true);
   };
@@ -99,27 +98,29 @@ function Dashboard() {
         <form className="form-horizontal">
           <div className="box-info full" id="taskFormContainer">
             <h2>Order Details</h2>
-            {error && <div className="notification error">{error}</div>}
             <div className="panel-body pt-0">
               <div className="row mb-4">
                 <div className="col-sm-12">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <div className="form-group" style={{ marginBottom: '0' }}>
-                      <label>Search by Customer Name - {filteredOrders.length + (filteredOrders.length > 1 ? " Orders Found" : " Order Found")}</label>
+                  <div className="search-bar" style={{ position: 'relative' }}>
+                    <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                      <label style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Search by Customer Name - {filteredOrders.length} {filteredOrders.length > 1 ? "Orders Found" : "Order Found"}
+                      </label>
                       <input
                         type="text"
                         className="form-control"
                         placeholder="Enter customer name"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        style={{ maxWidth: '600px' }} // Adjust width as needed
+                        style={{ maxWidth: '100%' }}
                       />
                     </div>
-                    <div>
-                      <Link to="/order" className="btn btn-success pull-right" style={{ marginLeft: '5px', textDecoration: 'none' }}>
+                    <div className="button-group" style={{ position: 'relative', marginLeft: '8px' }}>
+                      {error && <div className="notification error" style={{ top: '-60px', right: 0 }}>{error}</div>}
+                      <Link to="/order" className="btn btn-success" style={{ marginLeft: '8px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px', textDecoration: 'none' }}>
                         New Order
                       </Link>
-                      <Link to="/manage-product" className="btn btn-primary pull-right" style={{ marginLeft: '5px', textDecoration: 'none' }}>
+                      <Link to="/manage-product" className="btn btn-primary" style={{ marginLeft: '8px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px', textDecoration: 'none' }}>
                         Manage Products
                       </Link>
                     </div>
@@ -203,11 +204,10 @@ function Dashboard() {
                     </table>
                     <p style={{ textAlign: 'end', fontWeight: 'bold', paddingRight: '20px', color: 'green' }}>
                       <strong>Total Order Amount: </strong> ₹ {parseFloat(selectedOrder.total).toFixed(2)}
-                      {/* | <strong>Details Total: </strong> ₹ {calculateDetailsTotal(selectedOrder.order_details)} */}
                     </p>
                   </div>
                 ) : (
-                  <p style={{ color: ' red' }}>No order details available for this order.</p>
+                  <p style={{ color: 'red' }}>No order details available for this order.</p>
                 )}
               </div>
               <div className="modal-footer">

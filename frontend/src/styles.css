@@ -68,7 +68,7 @@ body {
 
 .notification {
   position: absolute;
-  top: -50px;
+  top: -60px;
   right: 0;
   padding: 10px 16px;
   border-radius: 6px;
@@ -261,6 +261,51 @@ body {
   max-width: 25%;
 }
 
+.table.orders_table th:nth-child(1),
+.table.orders_table td:nth-child(1) {
+  width: 25%;
+}
+
+.table.orders_table th:nth-child(2),
+.table.orders_table td:nth-child(2) {
+  width: 15%;
+}
+
+.table.orders_table th:nth-child(3),
+.table.orders_table td:nth-child(3) {
+  width: 25%;
+}
+
+.table.orders_table th:nth-child(4),
+.table.orders_table td:nth-child(4) {
+  width: 15%;
+}
+
+.table.order-details th:nth-child(1),
+.table.order-details td:nth-child(1) {
+  width: 30%;
+}
+
+.table.order-details th:nth-child(2),
+.table.order-details td:nth-child(2) {
+  width: 15%;
+}
+
+.table.order-details th:nth-child(3),
+.table.order-details td:nth-child(3) {
+  width: 15%;
+}
+
+.table.order-details th:nth-child(4),
+.table.order-details td:nth-child(4) {
+  width: 20%;
+}
+
+.table.order-details th:nth-child(5),
+.table.order-details td:nth-child(5) {
+  width: 20%;
+}
+
 .table.products-table th:nth-child(1),
 .table.products-table td:nth-child(1) {
   width: 30%;
@@ -279,6 +324,13 @@ body {
 .table.products-table th:nth-child(4),
 .table.products-table td:nth-child(4) {
   width: 30%;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .btn {
@@ -423,6 +475,12 @@ body {
 
 .search-bar .btn {
   flex-shrink: 0;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .modal {
@@ -682,6 +740,10 @@ body {
     word-wrap: break-word;
   }
 
+  .action-buttons {
+    gap: 4px;
+  }
+
   .btn {
     padding: 4px 8px;
     font-size: 0.75rem;
@@ -712,6 +774,17 @@ body {
   }
 
   .search-bar .btn {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .button-group .btn {
     width: 100%;
     margin-left: 0;
   }
@@ -829,6 +902,10 @@ body {
   .search-bar .btn {
     margin-left: 8px;
     flex-shrink: 0;
+  }
+
+  .button-group {
+    flex-direction: row;
   }
 }
 

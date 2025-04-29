@@ -89,6 +89,20 @@ body {
   background-color: #ef4444;
 }
 
+.order-notification {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 200; /* Above the navbar (z-index: 100) */
+  background-color: #ef4444;
+  animation: slideIn 0.3s ease-in-out;
+}
+
 @keyframes slideIn {
   from { transform: translateY(-20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -286,6 +300,20 @@ body {
   gap: 4px;
   align-items: center;
   justify-content: flex-start;
+}
+
+@media (min-width: 576px) {
+  .action-buttons {
+    flex-direction: row;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 575px) {
+  .action-buttons {
+    flex-direction: row;
+    gap: 4px;
+  }
 }
 
 .btn {
@@ -695,10 +723,6 @@ body {
     word-wrap: break-word;
   }
 
-  .action-buttons {
-    gap: 4px;
-  }
-
   .btn {
     padding: 4px 8px;
     font-size: 0.75rem;
@@ -742,6 +766,14 @@ body {
   .button-group .btn {
     width: 100%;
     margin-left: 0;
+  }
+
+  .order-notification {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0.75rem;
+    padding: 6px 8px;
   }
 }
 

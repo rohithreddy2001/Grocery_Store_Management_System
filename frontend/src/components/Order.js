@@ -1,4 +1,3 @@
-// Order.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -159,8 +158,13 @@ function Order() {
     <div className="right content-page">
       <div className="body content rows scroll-y">
         <div className="box-info full" id="taskOrderContainer">
-          <div className="new-order-header">
+          <div className="new-order-header" style={{ position: 'relative' }}>
             <h2>New Order</h2>
+            {error && (
+              <div className="notification error order-notification" role="alert">
+                {error}
+              </div>
+            )}
             <Link to="/">
               <button
                 type="button"
@@ -186,12 +190,6 @@ function Order() {
                 />
               </div>
             </div>
-
-            {error && (
-              <div className="notification error" role="alert">
-                {error}
-              </div>
-            )}
 
             <div className="form-section product-section">
               <div className="product-header">

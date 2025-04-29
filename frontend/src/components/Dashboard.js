@@ -47,9 +47,11 @@ function Dashboard() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [searchTerm, setSearchTerm] = useState(''); // New state for search
   const [loading, setLoading] = useState(true); // New state for loading
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setLoading(true); // Set loading to true when fetch starts
+    setError(null);
     fetch(`${API_BASE_URL}/getAllOrders`)
       .then(response => response.json())
       .then(data => {
@@ -58,7 +60,11 @@ function Dashboard() {
         const total = data.reduce((sum, order) => sum + parseFloat(order.total || 0), 0);
         setTotalCost(total);
       })
-      .catch(error => console.error('Error fetching orders:', error))
+      .catch(error => {
+        setError(error.message);
+        // console.error('Error fetching orders:', error); // Debug: Log error
+        // setTimeout(() => setError(null), 3000);
+      })      
       .finally(() => setLoading(false)); // Set loading to false when fetch completes or fails
   }, []);
 
@@ -93,6 +99,7 @@ function Dashboard() {
         <form className="form-horizontal">
           <div className="box-info full" id="taskFormContainer">
             <h2>Order Details</h2>
+            {error && <div className="notification error">{error}</div>}
             <div className="panel-body pt-0">
               <div className="row mb-4">
                 <div className="col-sm-12">

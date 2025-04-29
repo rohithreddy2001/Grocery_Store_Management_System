@@ -108,6 +108,7 @@ function ManageProduct() {
           <div className="row">
             <div className="col-sm-9">
               <div className="form-group">
+                <label>Search by Product Name - {filteredProducts.length + (filteredProducts.length > 1 ? " Products Found" : " Product Found")}</label>
                 <input
                   type="text"
                   className="form-control"

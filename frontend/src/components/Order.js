@@ -188,7 +188,7 @@ function Order() {
             </div>
 
             {error && (
-              <div className="alert alert-danger" role="alert">
+              <div className="notification error" role="alert">
                 {error}
               </div>
             )}

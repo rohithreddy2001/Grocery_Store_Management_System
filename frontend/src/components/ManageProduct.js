@@ -127,7 +127,7 @@ function ManageProduct() {
                     <button
                       type="button"
                       className="btn btn-success"
-                      style={{ marginLeft: '8px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px' }}
+                      style={{ marginLeft: '0px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px' }}
                       onClick={() => setShowModal(true)}
                     >
                       Add New Product

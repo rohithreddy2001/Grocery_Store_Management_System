@@ -117,10 +117,10 @@ function Dashboard() {
                     </div>
                     <div className="button-group" style={{ position: 'relative', marginLeft: '8px' }}>
                       {error && <div className="notification error" style={{ top: '-60px', right: 0 }}>{error}</div>}
-                      <Link to="/order" className="btn btn-success" style={{ marginLeft: '8px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px', textDecoration: 'none' }}>
+                      <Link to="/order" className="btn btn-success" style={{ marginLeft: '0px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px', textDecoration: 'none' }}>
                         New Order
                       </Link>
-                      <Link to="/manage-product" className="btn btn-primary" style={{ marginLeft: '8px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px', textDecoration: 'none' }}>
+                      <Link to="/manage-product" className="btn btn-primary" style={{ marginLeft: '0px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px', textDecoration: 'none' }}>
                         Manage Products
                       </Link>
                     </div>

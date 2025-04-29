@@ -67,10 +67,19 @@ function ManageProduct() {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: `data=${JSON.stringify({ product_id: productId })}`
         });
-        if (!response.ok) throw new Error('Failed to delete product');
-        setProducts(products.filter(product => product.product_id !== productId));
-        setFilteredProducts(filteredProducts.filter(product => product.product_id !== productId));
-        setSuccess('Product deleted successfully!');
+        if (!response.ok) {
+          const result = await response.json();
+          if (result.error) {
+            throw new Error(result.error); // Throw the specific error message
+          }
+        }
+        // Refresh product list from backend to ensure consistency
+        const productResponse = await fetch(`${API_BASE_URL}/getProducts`, { mode: 'cors' });
+        if (!productResponse.ok) throw new Error('Failed to refresh products');
+        const productData = await productResponse.json();
+        setProducts(productData);
+        setFilteredProducts(productData);
+        setSuccess(`Product "${productName}" deleted successfully!`);
         setTimeout(() => setSuccess(null), 3000);
       } catch (err) {
         setError(err.message);
@@ -103,8 +112,7 @@ function ManageProduct() {
       <div className="body content rows scroll-y">
         <div className="box-info full">
           <h2>Manage Products</h2>
-          {error && <div className="notification error">{error}</div>}
-          {success && <div className="notification success">{success}</div>}
+          {loading && <div className="loading">Loading...</div>}
           <div className="row">
             <div className="col-sm-9">
               <div className="form-group">
@@ -120,7 +128,9 @@ function ManageProduct() {
               </div>
             </div>
             <div className="col-sm-3">
-              <div className="form-group pull-right">
+              <div className="form-group pull-right" style={{ position: 'relative' }}>
+                {error && <div className="notification error">{error}</div>}
+                {success && <div className="notification success">{success}</div>}
                 <button
                   type="button"
                   className="btn btn-success"
@@ -175,7 +185,6 @@ function ManageProduct() {
               </div>
             </div>
           </div>
-          {loading && <div className="loading">Loading...</div>}
           {showModal && (
             <ProductModal
               onClose={() => setShowModal(false)}

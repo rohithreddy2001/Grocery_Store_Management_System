@@ -10,7 +10,7 @@ body {
   background-position: center;
   color: #1e293b;
   font-size: 14px;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
 }
 
 .container {
@@ -18,7 +18,7 @@ body {
   max-width: 1280px;
   margin: 0 auto;
   padding: 10px;
-  overflow-x: hidden; /* Ensure container doesn't cause horizontal scroll */
+  overflow-x: hidden;
   box-sizing: border-box;
 }
 
@@ -67,15 +67,18 @@ body {
 }
 
 .notification {
-  position: relative;
+  position: absolute;
+  top: -50px;
+  right: 0;
   padding: 10px 16px;
   border-radius: 6px;
   color: #ffffff;
   font-size: 0.85rem;
   font-weight: 500;
   z-index: 10;
-  max-width: 100%;
+  width: max-content;
   margin-bottom: 10px;
+  animation: slideIn 0.3s ease-in-out;
 }
 
 .notification.success {
@@ -165,7 +168,7 @@ body {
 }
 
 .breadcrumb a:hover {
-  color: rgb(255, 115, 0);;
+  color: rgb(255, 115, 0);
 }
 
 .button-menu-mobile {
@@ -256,51 +259,6 @@ body {
 .table th, .table td {
   min-width: 60px;
   max-width: 25%;
-}
-
-.table.orders_table th:nth-child(1),
-.table.orders_table td:nth-child(1) {
-  width: 25%;
-}
-
-.table.orders_table th:nth-child(2),
-.table.orders_table td:nth-child(2) {
-  width: 15%;
-}
-
-.table.orders_table th:nth-child(3),
-.table.orders_table td:nth-child(3) {
-  width: 25%;
-}
-
-.table.orders_table th:nth-child(4),
-.table.orders_table td:nth-child(4) {
-  width: 15%;
-}
-
-.table.order-details th:nth-child(1),
-.table.order-details td:nth-child(1) {
-  width: 30%;
-}
-
-.table.order-details th:nth-child(2),
-.table.order-details td:nth-child(2) {
-  width: 15%;
-}
-
-.table.order-details th:nth-child(3),
-.table.order-details td:nth-child(3) {
-  width: 15%;
-}
-
-.table.order-details th:nth-child(4),
-.table.order-details td:nth-child(4) {
-  width: 20%;
-}
-
-.table.order-details th:nth-child(5),
-.table.order-details td:nth-child(5) {
-  width: 20%;
 }
 
 .table.products-table th:nth-child(1),
@@ -450,21 +408,20 @@ body {
 
 .search-bar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
   align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
   max-width: 100%;
   box-sizing: border-box;
   margin-bottom: 12px;
 }
 
-.search-bar input {
+.search-bar .form-group {
   flex: 1;
-  min-width: 120px;
-  max-width: 100%;
+  margin-bottom: 0;
 }
 
-.search-bar button {
+.search-bar .btn {
   flex-shrink: 0;
 }
 
@@ -554,11 +511,7 @@ body {
   max-width: 100%;
 }
 
-.col-sm-12,
-.col-sm-4,
-.col-sm-3,
-.col-sm-2,
-.col-sm-9 {
+.col-sm-12 {
   position: relative;
   width: 100%;
   padding-right: 8px;
@@ -751,10 +704,16 @@ body {
   .search-bar {
     flex-direction: column;
     align-items: stretch;
+    gap: 8px;
   }
 
-  .search-bar input {
+  .search-bar .form-group {
     width: 100%;
+  }
+
+  .search-bar .btn {
+    width: 100%;
+    margin-left: 0;
   }
 }
 
@@ -801,8 +760,10 @@ body {
   }
 
   .btn {
-    width: auto;
+    padding: 6px 12px;
+    font-size: 0.85rem;
     margin: 0 4px;
+    width: auto;
   }
 
   .pull-right {
@@ -851,69 +812,23 @@ body {
     margin-left: -10px;
   }
 
-  .col-sm-12,
-  .col-sm-4,
-  .col-sm-3,
-  .col-sm-2,
-  .col-sm-9 {
+  .col-sm-12 {
     padding-right: 10px;
     padding-left: 10px;
   }
 
-  .col-sm-12 {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-  .col-sm-4 {
-    flex: 0 0 33.333333%;
-    max-width: 33.333333%;
-  }
-  .col-sm-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
-  .col-sm-2 {
-    flex: 0 0 16.666667%;
-    max-width: 16.666667%;
-  }
-  .col-sm-9 {
-    flex: 0 0 75%;
-    max-width: 75%;
-  }
-
-  .new-order-header {
-    flex-direction: row;
-    justify-content: space-between;
+  .search-bar {
     align-items: center;
   }
 
-  .product-header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  .search-bar .form-group {
+    flex: 1;
+    margin-bottom: 0;
   }
 
-  .product-row {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .product-row .form-group {
-    min-width: 120px;
-  }
-
-  .total-row {
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-  }
-
-  .total-value .product-grand-total {
-    width: 100px;
-  }
-
-  .total-row .btn {
-    width: auto;
+  .search-bar .btn {
+    margin-left: 8px;
+    flex-shrink: 0;
   }
 }
 

@@ -7,27 +7,26 @@ function ManageProduct() {
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(''); // State for search
-  const [loading, setLoading] = useState(true); // State for loading
-  const [error, setError] = useState(null); // State for error notification
-  const [success, setSuccess] = useState(null); // State for success notification
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    setLoading(true); // Set loading to true when fetch starts
+    setLoading(true);
     fetch(`${API_BASE_URL}/getProducts`)
       .then(response => response.json())
       .then(data => {
-        setProducts(data || []); // Ensure data is an array
-        setFilteredProducts(data || []); // Sync filteredProducts with products
+        setProducts(data || []);
+        setFilteredProducts(data || []);
       })
       .catch(error => {
         console.error('Error fetching products:', error);
         setError('Failed to fetch products.');
       })
-      .finally(() => setLoading(false)); // Set loading to false when fetch completes or fails
+      .finally(() => setLoading(false));
   }, []);
 
-  // Filter products based on search term
   const [filteredProducts, setFilteredProducts] = useState([]);
   useEffect(() => {
     const query = searchTerm.toLowerCase();
@@ -47,17 +46,16 @@ function ManageProduct() {
         });
         const result = await response.json();
         if (result.error) {
-          throw new Error(result.error); // Throw the specific error (e.g., order dependency)
+          throw new Error(result.error);
         }
-        // Immediately update state to reflect deletion (like the old code)
         setProducts(products.filter(product => product.product_id !== productId));
         setFilteredProducts(filteredProducts.filter(product => product.product_id !== productId));
         setSuccess(`Product "${productName}" deleted successfully!`);
-        setTimeout(() => setSuccess(null), 3000); // Auto-hide success after 3 seconds
+        setTimeout(() => setSuccess(null), 3000);
       } catch (err) {
         console.error('Error deleting product:', err);
-        setError(err.message); // Display the specific error message
-        setTimeout(() => setError(null), 3000); // Auto-hide error after 3 seconds
+        setError(err.message);
+        setTimeout(() => setError(null), 3000);
       }
     }
   };
@@ -92,7 +90,7 @@ function ManageProduct() {
         setTimeout(() => {
           setSuccess(null);
           setError(null);
-        }, 3000); // Auto-hide notifications after 3 seconds
+        }, 3000);
       });
   };
 
@@ -109,25 +107,27 @@ function ManageProduct() {
           <div className="panel-body pt-0">
             <div className="row mb-4">
               <div className="col-sm-12">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', position: 'relative' }}>
-                  <div className="form-group" style={{ marginBottom: '0' }}>
-                    <label>Search by Product Name - {filteredProducts.length + (filteredProducts.length > 1 ? " Products Found" : " Product Found")}</label>
+                <div className="search-bar" style={{ position: 'relative' }}>
+                  <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                    <label style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      Search by Product Name - {filteredProducts.length} {filteredProducts.length > 1 ? "Products Found" : "Product Found"}
+                    </label>
                     <input
                       type="text"
                       className="form-control"
                       placeholder="Enter product name"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      style={{ maxWidth: '600px' }}
+                      style={{ maxWidth: '100%' }}
                     />
                   </div>
-                  <div style={{ position: 'relative' }}>
+                  <div>
                     {error && <div className="notification error">{error}</div>}
                     {success && <div className="notification success">{success}</div>}
                     <button
                       type="button"
-                      className="btn btn-sm btn-success pull-right"
-                      style={{ marginRight: '28px', fontSize: '14px', fontWeight: '500' }}
+                      className="btn btn-success"
+                      style={{ marginLeft: '8px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px' }}
                       onClick={() => setShowModal(true)}
                     >
                       Add New Product
@@ -152,17 +152,16 @@ function ManageProduct() {
                         <td>
                           <button
                             type="button"
-                            className="btn btn-xs btn-warning"
-                            style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
+                            className="btn btn-warning"
+                            style={{ marginLeft: '0px', fontSize: '0.75rem', fontWeight: '500', width: '70px' }}
                             onClick={() => handleUpdate(product)}
                           >
                             Update
                           </button>
-                           
                           <button
                             type="button"
-                            className="btn btn-xs btn-danger"
-                            style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
+                            className="btn btn-danger"
+                            style={{ marginLeft: '8px', fontSize: '0.75rem', fontWeight: '500', width: '70px' }}
                             onClick={() => handleDelete(product.product_id, product.name)}
                           >
                             Delete

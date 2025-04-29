@@ -5,59 +5,37 @@ const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
 function ManageProduct() {
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [uoms, setUoms] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(''); // State for search
+  const [loading, setLoading] = useState(true); // State for loading
+  const [error, setError] = useState(null); // State for error notification
+  const [success, setSuccess] = useState(null); // State for success notification
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const productResponse = await fetch(`${API_BASE_URL}/getProducts`, { mode: 'cors' });
-        if (!productResponse.ok) throw new Error('Failed to fetch products');
-        const productData = await productResponse.json();
-        setProducts(productData);
-        setFilteredProducts(productData);
-
-        const uomResponse = await fetch(`${API_BASE_URL}/getUOM`, { mode: 'cors' });
-        if (!uomResponse.ok) throw new Error('Failed to fetch UOMs');
-        const uomData = await uomResponse.json();
-        setUoms(uomData);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    setLoading(true); // Set loading to true when fetch starts
+    fetch(`${API_BASE_URL}/getProducts`)
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data || []); // Ensure data is an array
+        setFilteredProducts(data || []); // Sync filteredProducts with products
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+        setError('Failed to fetch products.');
+      })
+      .finally(() => setLoading(false)); // Set loading to false when fetch completes or fails
   }, []);
 
-  // Automatic search on input change
+  // Filter products based on search term
+  const [filteredProducts, setFilteredProducts] = useState([]);
   useEffect(() => {
-    const query = searchQuery.toLowerCase();
+    const query = searchTerm.toLowerCase();
     const filtered = products.filter(product =>
       product.name.toLowerCase().includes(query)
     );
     setFilteredProducts(filtered);
-  }, [searchQuery, products]);
-
-  const handleAddProduct = () => {
-    setSelectedProduct(null);
-    setShowModal(true);
-  };
-
-  const handleUpdate = (product) => {
-    setSelectedProduct(product);
-    setShowModal(true);
-  };
+  }, [searchTerm, products]);
 
   const handleDelete = async (productId, productName) => {
     if (window.confirm(`Are you sure you want to delete ${productName}?`)) {
@@ -65,85 +43,97 @@ function ManageProduct() {
         const response = await fetch(`${API_BASE_URL}/deleteProduct`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: `data=${JSON.stringify({ product_id: productId })}`
+          body: `product_id=${productId}`
         });
-        if (!response.ok) {
-          const result = await response.json();
-          if (result.error) {
-            throw new Error(result.error); // Throw the specific error message
-          }
+        const result = await response.json();
+        if (result.error) {
+          throw new Error(result.error); // Throw the specific error (e.g., order dependency)
         }
-        // Refresh product list from backend to ensure consistency
-        const productResponse = await fetch(`${API_BASE_URL}/getProducts`, { mode: 'cors' });
-        if (!productResponse.ok) throw new Error('Failed to refresh products');
-        const productData = await productResponse.json();
-        setProducts(productData);
-        setFilteredProducts(productData);
+        // Immediately update state to reflect deletion (like the old code)
+        setProducts(products.filter(product => product.product_id !== productId));
+        setFilteredProducts(filteredProducts.filter(product => product.product_id !== productId));
         setSuccess(`Product "${productName}" deleted successfully!`);
-        setTimeout(() => setSuccess(null), 3000);
+        setTimeout(() => setSuccess(null), 3000); // Auto-hide success after 3 seconds
       } catch (err) {
-        setError(err.message);
-        setTimeout(() => setError(null), 3000);
+        console.error('Error deleting product:', err);
+        setError(err.message); // Display the specific error message
+        setTimeout(() => setError(null), 3000); // Auto-hide error after 3 seconds
       }
     }
   };
 
-  const handleSaveProduct = async () => {
+  const handleUpdate = (product) => {
+    setSelectedProduct(product);
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
     setShowModal(false);
+    setSelectedProduct(null);
+  };
+
+  const handleModalSave = () => {
+    setShowModal(false);
+    setSelectedProduct(null);
     setLoading(true);
-    try {
-      const response = await fetch(`${API_BASE_URL}/getProducts`, { mode: 'cors' });
-      if (!response.ok) throw new Error('Failed to fetch products');
-      const data = await response.json();
-      setProducts(data);
-      setFilteredProducts(data);
-      setLoading(false); // Set loading to false immediately after data is received
-      setSuccess(selectedProduct ? 'Product updated successfully!' : 'Product added successfully!');
-      setTimeout(() => setSuccess(null), 3000);
-    } catch (err) {
-      setError(err.message);
-      setLoading(false); // Ensure loading stops even on error
-      setTimeout(() => setError(null), 3000);
-    }
+    fetch(`${API_BASE_URL}/getProducts`)
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data || []);
+        setFilteredProducts(data || []);
+        setSuccess(selectedProduct ? 'Product updated successfully!' : 'Product added successfully!');
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+        setError('Failed to refresh product list.');
+      })
+      .finally(() => {
+        setLoading(false);
+        setTimeout(() => {
+          setSuccess(null);
+          setError(null);
+        }, 3000); // Auto-hide notifications after 3 seconds
+      });
   };
 
   return (
     <div className="right content-page">
       <div className="body content rows scroll-y">
-        <div className="box-info full">
-          <h2>Manage Products</h2>
-          {loading && <div className="loading">Loading...</div>}
-          <div className="row">
-            <div className="col-sm-9">
-              <div className="form-group">
-                <label>Search by Product Name - {filteredProducts.length + (filteredProducts.length > 1 ? " Products Found" : " Product Found")}</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{ maxWidth: '600px' }}
-                />
-              </div>
-            </div>
-            <div className="col-sm-3">
-              <div className="form-group pull-right" style={{ position: 'relative' }}>
-                {error && <div className="notification error">{error}</div>}
-                {success && <div className="notification success">{success}</div>}
-                <button
-                  type="button"
-                  className="btn btn-success"
-                  onClick={handleAddProduct}
-                >
-                  Add New Product
-                </button>
-              </div>
-            </div>
+        {loading && (
+          <div className="loading">
+            <span>Loading...</span>
           </div>
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="table-container">
+        )}
+        <div className="box-info full" id="taskFormContainer">
+          <h2>Manage Products</h2>
+          <div className="panel-body pt-0">
+            <div className="row mb-4">
+              <div className="col-sm-12">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', position: 'relative' }}>
+                  <div className="form-group" style={{ marginBottom: '0' }}>
+                    <label>Search by Product Name - {filteredProducts.length + (filteredProducts.length > 1 ? " Products Found" : " Product Found")}</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter product name"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      style={{ maxWidth: '600px' }}
+                    />
+                  </div>
+                  <div style={{ position: 'relative' }}>
+                    {error && <div className="notification error">{error}</div>}
+                    {success && <div className="notification success">{success}</div>}
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-success pull-right"
+                      style={{ marginRight: '28px', fontSize: '14px', fontWeight: '500' }}
+                      onClick={() => setShowModal(true)}
+                    >
+                      Add New Product
+                    </button>
+                  </div>
+                </div>
                 <table className="table products-table">
                   <thead>
                     <tr>
@@ -163,8 +153,8 @@ function ManageProduct() {
                           <button
                             type="button"
                             className="btn btn-xs btn-warning"
-                            onClick={() => handleUpdate(product)}
                             style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
+                            onClick={() => handleUpdate(product)}
                           >
                             Update
                           </button>
@@ -172,8 +162,8 @@ function ManageProduct() {
                           <button
                             type="button"
                             className="btn btn-xs btn-danger"
-                            onClick={() => handleDelete(product.product_id, product.name)}
                             style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
+                            onClick={() => handleDelete(product.product_id, product.name)}
                           >
                             Delete
                           </button>
@@ -185,15 +175,15 @@ function ManageProduct() {
               </div>
             </div>
           </div>
-          {showModal && (
-            <ProductModal
-              onClose={() => setShowModal(false)}
-              onSave={handleSaveProduct}
-              product={selectedProduct}
-            />
-          )}
         </div>
       </div>
+      {showModal && (
+        <ProductModal
+          onClose={handleModalClose}
+          onSave={handleModalSave}
+          product={selectedProduct}
+        />
+      )}
     </div>
   );
 }

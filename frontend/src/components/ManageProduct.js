@@ -154,6 +154,7 @@ function ManageProduct() {
                             type="button"
                             className="btn btn-xs btn-warning"
                             onClick={() => handleUpdate(product)}
+                            style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
                           >
                             Update
                           </button>
@@ -162,6 +163,7 @@ function ManageProduct() {
                             type="button"
                             className="btn btn-xs btn-danger"
                             onClick={() => handleDelete(product.product_id, product.name)}
+                            style={{ marginLeft: '0px', fontSize: '14px', fontWeight: '500' }}
                           >
                             Delete
                           </button>

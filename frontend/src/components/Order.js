@@ -169,7 +169,7 @@ function Order() {
               <button
                 type="button"
                 className="btn btn-xs btn-danger"
-                style={{ fontSize: '14px', fontWeight: '500' }}
+                style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px' }}
               >
                 Exit Page
               </button>

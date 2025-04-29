@@ -137,10 +137,10 @@ function ManageProduct() {
                 <table className="table products-table">
                   <thead>
                     <tr>
-                      <th style={{ width: '40%' }}>Name</th>
+                      <th style={{ width: '42%' }}>Name</th>
                       <th style={{ width: '20%' }}>Unit</th>
                       <th style={{ width: '20%' }}>Price Per Unit</th>
-                      <th style={{ width: '20%' }}>Action</th>
+                      <th style={{ width: '18%' }}>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -153,7 +153,7 @@ function ManageProduct() {
                           <button
                             type="button"
                             className="btn btn-warning"
-                            style={{ fontSize: '0.75rem', fontWeight: '500', width: '60px' }}
+                            style={{ fontSize: '0.75rem', fontWeight: '500', width: '80px' }}
                             onClick={() => handleUpdate(product)}
                           >
                             Update
@@ -161,7 +161,7 @@ function ManageProduct() {
                           <button
                             type="button"
                             className="btn btn-danger"
-                            style={{ fontSize: '0.75rem', fontWeight: '500', width: '60px' }}
+                            style={{ fontSize: '0.75rem', fontWeight: '500', width: '80px' }}
                             onClick={() => handleDelete(product.product_id, product.name)}
                           >
                             Delete

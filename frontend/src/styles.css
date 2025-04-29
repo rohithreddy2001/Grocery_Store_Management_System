@@ -258,57 +258,12 @@ body {
 
 .table th, .table td {
   min-width: 60px;
-  max-width: 25%;
-}
-
-.table.orders_table th:nth-child(1),
-.table.orders_table td:nth-child(1) {
-  width: 25%;
-}
-
-.table.orders_table th:nth-child(2),
-.table.orders_table td:nth-child(2) {
-  width: 15%;
-}
-
-.table.orders_table th:nth-child(3),
-.table.orders_table td:nth-child(3) {
-  width: 25%;
-}
-
-.table.orders_table th:nth-child(4),
-.table.orders_table td:nth-child(4) {
-  width: 15%;
-}
-
-.table.order-details th:nth-child(1),
-.table.order-details td:nth-child(1) {
-  width: 30%;
-}
-
-.table.order-details th:nth-child(2),
-.table.order-details td:nth-child(2) {
-  width: 15%;
-}
-
-.table.order-details th:nth-child(3),
-.table.order-details td:nth-child(3) {
-  width: 15%;
-}
-
-.table.order-details th:nth-child(4),
-.table.order-details td:nth-child(4) {
-  width: 20%;
-}
-
-.table.order-details th:nth-child(5),
-.table.order-details td:nth-child(5) {
-  width: 20%;
+  max-width: 40%;
 }
 
 .table.products-table th:nth-child(1),
 .table.products-table td:nth-child(1) {
-  width: 30%;
+  width: 40%;
 }
 
 .table.products-table th:nth-child(2),
@@ -323,12 +278,12 @@ body {
 
 .table.products-table th:nth-child(4),
 .table.products-table td:nth-child(4) {
-  width: 30%;
+  width: 20%;
 }
 
 .action-buttons {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   align-items: center;
   justify-content: flex-start;
 }

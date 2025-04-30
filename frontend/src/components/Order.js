@@ -184,6 +184,7 @@ function Order() {
                 type="button"
                 className="btn btn-xs btn-danger"
                 style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px' }}
+                onClick={() => alert('Exit Page clicked')}
               >
                 Exit Page
               </button>

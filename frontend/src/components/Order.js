@@ -13,7 +13,6 @@ const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
       return await response.json();
     } catch (error) {
       if (i === retries - 1) throw error;
-      console.log(`Retrying fetch for ${url} (attempt ${i + 1}/${retries})...`);
       await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
@@ -38,7 +37,6 @@ function Order() {
 
       try {
         const data = await fetchWithRetry(`${API_BASE_URL}/getProducts`, { mode: 'cors' });
-        console.log('Fetched products:', data);
         if (Array.isArray(data)) {
           setProducts(data);
           const prices = {};
@@ -47,28 +45,23 @@ function Order() {
           });
           setProductPrices(prices);
         } else {
-          console.error('Products data is not an array:', data);
           setProducts([]);
           setProductPrices({});
           setError('Failed to load products: Invalid data format');
         }
       } catch (error) {
-        console.error('Error fetching products:', error);
         setError(`Failed to load products: ${error.message}`);
       }
 
       try {
         const data = await fetchWithRetry(`${API_BASE_URL}/getUOM`, { mode: 'cors' });
-        console.log('Fetched UOMs:', data);
         if (Array.isArray(data)) {
           setUoms(data);
         } else {
-          console.error('UOMs data is not an array:', data);
           setUoms([]);
           setError('Failed to load units: Invalid data format');
         }
       } catch (error) {
-        console.error('Error fetching UOMs:', error);
         setError(`Failed to load units: ${error.message}`);
       } finally {
         setLoading(false);
@@ -81,19 +74,16 @@ function Order() {
   // Synchronize uom_id after products, uoms, or items change
   useEffect(() => {
     if (products.length > 0 && uoms.length > 0) {
-      console.log('Synchronizing items with uom_id...');
       const newItems = items.map(item => {
         if (item.product_id) {
           const selectedProduct = products.find(p => String(p.product_id) === String(item.product_id));
           if (selectedProduct && selectedProduct.uom_id) {
-            console.log(`Setting uom_id for product ${selectedProduct.name}: ${selectedProduct.uom_id}`);
             return { ...item, uom_id: selectedProduct.uom_id };
           }
         }
         return item;
       });
       setItems(newItems);
-      console.log('Synchronized items:', newItems);
       calculateGrandTotal(newItems);
     }
   }, [products, uoms, items]);
@@ -109,25 +99,17 @@ function Order() {
   };
 
   const handleProductChange = (index, product_id) => {
-    console.log(`handleProductChange: product_id=${product_id}, type=${typeof product_id}`);
-    console.log('Products array:', products.map(p => ({ id: p.product_id, type: typeof p.product_id })));
     const newItems = [...items];
     newItems[index].product_id = product_id;
     newItems[index].price = productPrices[product_id] || 0;
-    // Automatically set the uom_id based on the selected product
     const selectedProduct = products.find(p => String(p.product_id) === String(product_id));
     if (selectedProduct) {
-      console.log(`Selected product: ${selectedProduct.name}, uom_id: ${selectedProduct.uom_id}`);
       newItems[index].uom_id = selectedProduct.uom_id || '';
-      const uom = uoms.find(u => u.uom_id === selectedProduct.uom_id);
-      console.log(`UOM for product: ${uom ? uom.uom_name : 'Not found'}`);
     } else {
       newItems[index].uom_id = '';
-      console.log('No product selected or product not found');
     }
     newItems[index].total = newItems[index].price * newItems[index].quantity;
     setItems(newItems);
-    console.log('Updated items:', newItems);
     calculateGrandTotal(newItems);
   };
 
@@ -146,7 +128,6 @@ function Order() {
 
   const handleSaveOrder = () => {
     if (items.some(item => !item.product_id || item.quantity <= 0 || !item.uom_id)) {
-      console.log('Validation failed. Items:', items);
       alert('Please complete all product details.');
       return;
     }
@@ -160,7 +141,6 @@ function Order() {
         total_price: item.total
       }))
     };
-    console.log('Saving order:', requestPayload);
     fetch(`${API_BASE_URL}/insertOrder`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -172,12 +152,10 @@ function Order() {
         return response.json();
       })
       .then(data => {
-        console.log('Server response:', data);
         window.location.reload();
         alert('Order saved successfully!');
       })
       .catch(error => {
-        console.error('Error saving order:', error);
         setError(`Failed to save order: ${error.message}`);
         alert('Failed to save order. Check the page for details.');
       });

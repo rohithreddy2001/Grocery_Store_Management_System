@@ -544,7 +544,7 @@ body {
 .col-sm-12 {
   position: relative;
   width: 100%;
-  padding-right: 8px;
+  padding-right: 0;
   padding-left: 8px;
   box-sizing: border-box;
 }
@@ -699,6 +699,7 @@ body {
   .right.content-page {
     padding: 8px;
     margin-top: 5px;
+    padding-right: 0;
   }
 
   .box-info h2 {
@@ -764,6 +765,7 @@ body {
     right: 0;
     font-size: 0.75rem;
     padding: 6px 8px;
+    margin-right: 12px;
   }
 }
 

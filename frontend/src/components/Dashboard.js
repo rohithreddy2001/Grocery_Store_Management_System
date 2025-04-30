@@ -62,7 +62,7 @@ function Dashboard() {
       })
       .catch(error => {
         setError(error.message);
-        setTimeout(() => setError(null), 3000);
+        // setTimeout(() => setError(null), 3000);
       })      
       .finally(() => setLoading(false));
   }, []);
@@ -115,8 +115,8 @@ function Dashboard() {
                         style={{ maxWidth: '100%' }}
                       />
                     </div>
-                    <div className="button-group" style={{ position: 'relative', marginLeft: '8px' }}>
-                      {error && <div className="notification error" style={{ top: '-60px', right: 0 }}>{error}</div>}
+                    <div className="button-group" style={{ position: 'relative', marginLeft: 0 }}>
+                      {error && <div className="notification error" style={{ top: '-98px', right: '-10px' }}>{error}</div>}
                       <Link to="/order" className="btn btn-success" style={{ marginLeft: '0px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px', textDecoration: 'none' }}>
                         New Order
                       </Link>

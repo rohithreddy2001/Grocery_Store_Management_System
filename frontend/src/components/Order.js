@@ -78,6 +78,26 @@ function Order() {
     fetchData();
   }, []);
 
+  // New useEffect to synchronize uom_id after products and uoms are loaded
+  useEffect(() => {
+    if (products.length > 0 && uoms.length > 0) {
+      console.log('Synchronizing items with uom_id...');
+      const newItems = items.map(item => {
+        if (item.product_id) {
+          const selectedProduct = products.find(p => p.product_id === item.product_id);
+          if (selectedProduct && selectedProduct.uom_id) {
+            console.log(`Setting uom_id for product ${selectedProduct.name}: ${selectedProduct.uom_id}`);
+            return { ...item, uom_id: selectedProduct.uom_id };
+          }
+        }
+        return item;
+      });
+      setItems(newItems);
+      console.log('Synchronized items:', newItems);
+      calculateGrandTotal(newItems);
+    }
+  }, [products, uoms]);
+
   const addItem = () => {
     setItems([...items, { product_id: '', quantity: 1, uom_id: '', price: 0, total: 0 }]);
   };
@@ -94,9 +114,18 @@ function Order() {
     newItems[index].price = productPrices[product_id] || 0;
     // Automatically set the uom_id based on the selected product
     const selectedProduct = products.find(p => p.product_id === product_id);
-    newItems[index].uom_id = selectedProduct ? selectedProduct.uom_id : '';
+    if (selectedProduct) {
+      console.log(`Selected product: ${selectedProduct.name}, uom_id: ${selectedProduct.uom_id}`);
+      newItems[index].uom_id = selectedProduct.uom_id || '';
+      const uom = uoms.find(u => u.uom_id === selectedProduct.uom_id);
+      console.log(`UOM for product: ${uom ? uom.uom_name : 'Not found'}`);
+    } else {
+      newItems[index].uom_id = '';
+      console.log('No product selected or product not found');
+    }
     newItems[index].total = newItems[index].price * newItems[index].quantity;
     setItems(newItems);
+    console.log('Updated items:', newItems);
     calculateGrandTotal(newItems);
   };
 
@@ -115,7 +144,8 @@ function Order() {
 
   const handleSaveOrder = () => {
     if (items.some(item => !item.product_id || item.quantity <= 0 || !item.uom_id)) {
-      alert('Please complete all product and UOM details.');
+      console.log('Validation failed. Items:', items);
+      alert('Please complete all product details.');
       return;
     }
     const requestPayload = {
@@ -249,7 +279,7 @@ function Order() {
                         <input
                           name="uom"
                           className="form-control"
-                          value={uomName || ''}
+                          value={uomName || 'Select a product first'}
                           readOnly
                         />
                       </div>

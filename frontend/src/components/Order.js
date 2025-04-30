@@ -38,6 +38,7 @@ function Order() {
 
       try {
         const data = await fetchWithRetry(`${API_BASE_URL}/getProducts`, { mode: 'cors' });
+        console.log('Fetched products:', data);
         if (Array.isArray(data)) {
           setProducts(data);
           const prices = {};
@@ -46,23 +47,28 @@ function Order() {
           });
           setProductPrices(prices);
         } else {
+          console.error('Products data is not an array:', data);
           setProducts([]);
           setProductPrices({});
           setError('Failed to load products: Invalid data format');
         }
       } catch (error) {
+        console.error('Error fetching products:', error);
         setError(`Failed to load products: ${error.message}`);
       }
 
       try {
         const data = await fetchWithRetry(`${API_BASE_URL}/getUOM`, { mode: 'cors' });
+        console.log('Fetched UOMs:', data);
         if (Array.isArray(data)) {
           setUoms(data);
         } else {
+          console.error('UOMs data is not an array:', data);
           setUoms([]);
           setError('Failed to load units: Invalid data format');
         }
       } catch (error) {
+        console.error('Error fetching UOMs:', error);
         setError(`Failed to load units: ${error.message}`);
       } finally {
         setLoading(false);
@@ -71,23 +77,6 @@ function Order() {
 
     fetchData();
   }, []);
-
-  // Synchronize uom_id after products, uoms, or items change
-  useEffect(() => {
-    if (products.length > 0 && uoms.length > 0) {
-      const newItems = items.map(item => {
-        if (item.product_id) {
-          const selectedProduct = products.find(p => String(p.product_id) === String(item.product_id));
-          if (selectedProduct && selectedProduct.uom_id) {
-            return { ...item, uom_id: selectedProduct.uom_id };
-          }
-        }
-        return item;
-      });
-      setItems(newItems);
-      calculateGrandTotal(newItems);
-    }
-  }, [products, uoms, items]);
 
   const addItem = () => {
     setItems([...items, { product_id: '', quantity: 1, uom_id: '', price: 0, total: 0 }]);
@@ -103,12 +92,6 @@ function Order() {
     const newItems = [...items];
     newItems[index].product_id = product_id;
     newItems[index].price = productPrices[product_id] || 0;
-    const selectedProduct = products.find(p => String(p.product_id) === String(product_id));
-    if (selectedProduct) {
-      newItems[index].uom_id = selectedProduct.uom_id || '';
-    } else {
-      newItems[index].uom_id = '';
-    }
     newItems[index].total = newItems[index].price * newItems[index].quantity;
     setItems(newItems);
     calculateGrandTotal(newItems);
@@ -148,6 +131,7 @@ function Order() {
         total_price: item.total
       }))
     };
+    console.log('Saving order:', requestPayload);
     fetch(`${API_BASE_URL}/insertOrder`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -159,10 +143,12 @@ function Order() {
         return response.json();
       })
       .then(data => {
+        console.log('Server response:', data);
         window.location.reload();
         alert('Order saved successfully!');
       })
       .catch(error => {
+        console.error('Error saving order:', error);
         setError(`Failed to save order: ${error.message}`);
         alert('Failed to save order. Check the page for details.');
       });
@@ -184,13 +170,12 @@ function Order() {
                 type="button"
                 className="btn btn-xs btn-danger"
                 style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px' }}
-                onClick={() => alert('Exit Page clicked')}
               >
                 Exit Page
               </button>
             </Link>
           </div>
-          <form onSubmit={(e) => e.preventDefault()}>
+          <form>
             <div className="form-section">
               <div className="form-group">
                 <label>Customer Name</label>
@@ -261,12 +246,24 @@ function Order() {
                     </div>
                     <div className="form-group">
                       <label>Unit</label>
-                      <input
+                      <select
                         name="uom"
                         className="form-control"
-                        value={uoms.find(u => u.uom_id === item.uom_id)?.uom_name || 'Select a product first'}
-                        readOnly
-                      />
+                        value={item.uom_id}
+                        onChange={(e) => handleUomChange(index, e.target.value)}
+                        disabled={loading}
+                      >
+                        <option value="">Select Unit</option>
+                        {Array.isArray(uoms) && uoms.length > 0 ? (
+                          uoms.map(uom => (
+                            <option key={uom.uom_id} value={uom.uom_id}>
+                              {uom.uom_name}
+                            </option>
+                          ))
+                        ) : (
+                          <option disabled>No Units available</option>
+                        )}
+                      </select>
                     </div>
                     <div className="form-group">
                       <label>Total (Rs)</label>

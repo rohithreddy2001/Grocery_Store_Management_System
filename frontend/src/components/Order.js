@@ -71,7 +71,6 @@ function Order() {
     fetchData();
   }, []);
 
-  // Synchronize uom_id after products, uoms, or items change
   useEffect(() => {
     if (products.length > 0 && uoms.length > 0) {
       const newItems = items.map(item => {
@@ -182,7 +181,7 @@ function Order() {
               </button>
             </Link>
           </div>
-          <form>
+          <form onSubmit={(e) => e.preventDefault()}>
             <div className="form-section">
               <div className="form-group">
                 <label>Customer Name</label>

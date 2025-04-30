@@ -122,8 +122,8 @@ function ManageProduct() {
                     />
                   </div>
                   <div style={{ position: 'relative', marginLeft: 0 }}>
-                    {error && <div className="notification error" style={{ top: '-98px', right: '-10px' }}>{error}</div>}
-                    {success && <div className="notification success" style={{ top: '-98px', right: '-10px' }}>{success}</div>}
+                    {error && <div className="notification error" style={{ top: '-98px', right: '-6px' }}>{error}</div>}
+                    {success && <div className="notification success" style={{ top: '-98px', right: '-6px' }}>{success}</div>}
                     <button
                       type="button"
                       className="btn btn-success"

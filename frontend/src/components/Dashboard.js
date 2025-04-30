@@ -116,7 +116,7 @@ function Dashboard() {
                       />
                     </div>
                     <div className="button-group" style={{ position: 'relative', marginLeft: 0 }}>
-                      {error && <div className="notification error" style={{ top: '-98px', right: '-10px' }}>{error}</div>}
+                      {error && <div className="notification error" style={{ top: '-98px', right: '-6px' }}>{error}</div>}
                       <Link to="/order" className="btn btn-success" style={{ marginLeft: '0px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px', textDecoration: 'none' }}>
                         New Order
                       </Link>
@@ -142,7 +142,7 @@ function Dashboard() {
                             <td>{formatDateTime(order.datetime)}</td>
                             <td>{order.order_id}</td>
                             <td>{order.customer_name}</td>
-                            <td>{parseFloat(order.total).toFixed(2)} Rs</td>
+                            <td>₹ {parseFloat(order.total).toFixed(0)}</td>
                             <td>
                               <button
                                 type="button"

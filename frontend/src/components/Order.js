@@ -78,13 +78,13 @@ function Order() {
     fetchData();
   }, []);
 
-  // New useEffect to synchronize uom_id after products and uoms are loaded
+  // Synchronize uom_id after products, uoms, or items change
   useEffect(() => {
     if (products.length > 0 && uoms.length > 0) {
       console.log('Synchronizing items with uom_id...');
       const newItems = items.map(item => {
         if (item.product_id) {
-          const selectedProduct = products.find(p => p.product_id === item.product_id);
+          const selectedProduct = products.find(p => String(p.product_id) === String(item.product_id));
           if (selectedProduct && selectedProduct.uom_id) {
             console.log(`Setting uom_id for product ${selectedProduct.name}: ${selectedProduct.uom_id}`);
             return { ...item, uom_id: selectedProduct.uom_id };
@@ -96,7 +96,7 @@ function Order() {
       console.log('Synchronized items:', newItems);
       calculateGrandTotal(newItems);
     }
-  }, [products, uoms]);
+  }, [products, uoms, items]);
 
   const addItem = () => {
     setItems([...items, { product_id: '', quantity: 1, uom_id: '', price: 0, total: 0 }]);
@@ -109,11 +109,13 @@ function Order() {
   };
 
   const handleProductChange = (index, product_id) => {
+    console.log(`handleProductChange: product_id=${product_id}, type=${typeof product_id}`);
+    console.log('Products array:', products.map(p => ({ id: p.product_id, type: typeof p.product_id })));
     const newItems = [...items];
     newItems[index].product_id = product_id;
     newItems[index].price = productPrices[product_id] || 0;
     // Automatically set the uom_id based on the selected product
-    const selectedProduct = products.find(p => p.product_id === product_id);
+    const selectedProduct = products.find(p => String(p.product_id) === String(product_id));
     if (selectedProduct) {
       console.log(`Selected product: ${selectedProduct.name}, uom_id: ${selectedProduct.uom_id}`);
       newItems[index].uom_id = selectedProduct.uom_id || '';
@@ -232,7 +234,7 @@ function Order() {
               </div>
               <div className="product-rows-container">
                 {items.map((item, index) => {
-                  const selectedProduct = products.find(p => p.product_id === item.product_id);
+                  const selectedProduct = products.find(p => String(p.product_id) === String(item.product_id));
                   const uomName = selectedProduct ? uoms.find(u => u.uom_id === selectedProduct.uom_id)?.uom_name : '';
                   return (
                     <div className="product-row" key={index}>

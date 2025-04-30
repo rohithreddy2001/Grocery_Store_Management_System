@@ -92,6 +92,9 @@ function Order() {
     const newItems = [...items];
     newItems[index].product_id = product_id;
     newItems[index].price = productPrices[product_id] || 0;
+    // Automatically set the uom_id based on the selected product
+    const selectedProduct = products.find(p => p.product_id === product_id);
+    newItems[index].uom_id = selectedProduct ? selectedProduct.uom_id : '';
     newItems[index].total = newItems[index].price * newItems[index].quantity;
     setItems(newItems);
     calculateGrandTotal(newItems);
@@ -103,12 +106,6 @@ function Order() {
     newItems[index].total = newItems[index].price * newItems[index].quantity;
     setItems(newItems);
     calculateGrandTotal(newItems);
-  };
-
-  const handleUomChange = (index, uom_id) => {
-    const newItems = [...items];
-    newItems[index].uom_id = uom_id;
-    setItems(newItems);
   };
 
   const calculateGrandTotal = (items) => {
@@ -204,88 +201,80 @@ function Order() {
                 </button>
               </div>
               <div className="product-rows-container">
-                {items.map((item, index) => (
-                  <div className="product-row" key={index}>
-                    <div className="form-group">
-                      <label>Product</label>
-                      <select
-                        name="product"
-                        className="form-control"
-                        value={item.product_id}
-                        onChange={(e) => handleProductChange(index, e.target.value)}
-                        disabled={loading}
-                      >
-                        <option value="">Select Product</option>
-                        {products.map(product => (
-                          <option key={product.product_id} value={product.product_id}>
-                            {product.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>Price (Rs)</label>
-                      <input
-                        name="product_price"
-                        className="form-control product-price"
-                        value={item.price.toFixed(2)}
-                        readOnly
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Quantity</label>
-                      <input
-                        name="qty"
-                        type="number"
-                        min="1"
-                        className="form-control product-qty"
-                        value={item.quantity}
-                        onChange={(e) => handleQuantityChange(index, e.target.value)}
-                        disabled={loading}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Unit</label>
-                      <select
-                        name="uom"
-                        className="form-control"
-                        value={item.uom_id}
-                        onChange={(e) => handleUomChange(index, e.target.value)}
-                        disabled={loading}
-                      >
-                        <option value="">Select Unit</option>
-                        {Array.isArray(uoms) && uoms.length > 0 ? (
-                          uoms.map(uom => (
-                            <option key={uom.uom_id} value={uom.uom_id}>
-                              {uom.uom_name}
+                {items.map((item, index) => {
+                  const selectedProduct = products.find(p => p.product_id === item.product_id);
+                  const uomName = selectedProduct ? uoms.find(u => u.uom_id === selectedProduct.uom_id)?.uom_name : '';
+                  return (
+                    <div className="product-row" key={index}>
+                      <div className="form-group">
+                        <label>Product</label>
+                        <select
+                          name="product"
+                          className="form-control"
+                          value={item.product_id}
+                          onChange={(e) => handleProductChange(index, e.target.value)}
+                          disabled={loading}
+                        >
+                          <option value="">Select Product</option>
+                          {products.map(product => (
+                            <option key={product.product_id} value={product.product_id}>
+                              {product.name}
                             </option>
-                          ))
-                        ) : (
-                          <option disabled>No Units available</option>
-                        )}
-                      </select>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label>Price (Rs)</label>
+                        <input
+                          name="product_price"
+                          className="form-control product-price"
+                          value={item.price.toFixed(2)}
+                          readOnly
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Quantity</label>
+                        <input
+                          name="qty"
+                          type="number"
+                          min="1"
+                          className="form-control product-qty"
+                          value={item.quantity}
+                          onChange={(e) => handleQuantityChange(index, e.target.value)}
+                          disabled={loading}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Unit</label>
+                        <input
+                          name="uom"
+                          className="form-control"
+                          value={uomName || ''}
+                          readOnly
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Total (Rs)</label>
+                        <input
+                          name="item_total"
+                          className="form-control product-total"
+                          value={item.total.toFixed(2)}
+                          readOnly
+                        />
+                      </div>
+                      <div className="form-group product-row-actions">
+                        <button
+                          className="btn btn-sm btn-danger"
+                          type="button"
+                          onClick={() => removeItem(index)}
+                          disabled={loading}
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <label>Total (Rs)</label>
-                      <input
-                        name="item_total"
-                        className="form-control product-total"
-                        value={item.total.toFixed(2)}
-                        readOnly
-                      />
-                    </div>
-                    <div className="form-group product-row-actions">
-                      <button
-                        className="btn btn-sm btn-danger"
-                        type="button"
-                        onClick={() => removeItem(index)}
-                        disabled={loading}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 

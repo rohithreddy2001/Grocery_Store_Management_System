@@ -78,6 +78,23 @@ function Order() {
     fetchData();
   }, []);
 
+  // Synchronize uom_id after products, uoms, or items change
+  useEffect(() => {
+    if (products.length > 0 && uoms.length > 0) {
+      const newItems = items.map(item => {
+        if (item.product_id) {
+          const selectedProduct = products.find(p => String(p.product_id) === String(item.product_id));
+          if (selectedProduct && selectedProduct.uom_id) {
+            return { ...item, uom_id: selectedProduct.uom_id };
+          }
+        }
+        return item;
+      });
+      setItems(newItems);
+      calculateGrandTotal(newItems);
+    }
+  }, [products, uoms, items]);
+
   const addItem = () => {
     setItems([...items, { product_id: '', quantity: 1, uom_id: '', price: 0, total: 0 }]);
   };
@@ -92,6 +109,12 @@ function Order() {
     const newItems = [...items];
     newItems[index].product_id = product_id;
     newItems[index].price = productPrices[product_id] || 0;
+    const selectedProduct = products.find(p => String(p.product_id) === String(product_id));
+    if (selectedProduct) {
+      newItems[index].uom_id = selectedProduct.uom_id || '';
+    } else {
+      newItems[index].uom_id = '';
+    }
     newItems[index].total = newItems[index].price * newItems[index].quantity;
     setItems(newItems);
     calculateGrandTotal(newItems);
@@ -194,14 +217,6 @@ function Order() {
             <div className="form-section product-section">
               <div className="product-header">
                 <h3>Products</h3>
-                <button
-                  className="btn btn-sm btn-primary"
-                  type="button"
-                  onClick={addItem}
-                  disabled={loading}
-                >
-                  Add Product
-                </button>
               </div>
               <div className="product-rows-container">
                 {items.map((item, index) => (
@@ -246,24 +261,12 @@ function Order() {
                     </div>
                     <div className="form-group">
                       <label>Unit</label>
-                      <select
+                      <input
                         name="uom"
                         className="form-control"
-                        value={item.uom_id}
-                        onChange={(e) => handleUomChange(index, e.target.value)}
-                        disabled={loading}
-                      >
-                        <option value="">Select Unit</option>
-                        {Array.isArray(uoms) && uoms.length > 0 ? (
-                          uoms.map(uom => (
-                            <option key={uom.uom_id} value={uom.uom_id}>
-                              {uom.uom_name}
-                            </option>
-                          ))
-                        ) : (
-                          <option disabled>No Units available</option>
-                        )}
-                      </select>
+                        value={uoms.find(u => u.uom_id === item.uom_id)?.uom_name || 'Select a product first'}
+                        readOnly
+                      />
                     </div>
                     <div className="form-group">
                       <label>Total (Rs)</label>
@@ -287,6 +290,15 @@ function Order() {
                   </div>
                 ))}
               </div>
+              <button
+                className="btn btn-sm btn-success"
+                type="button"
+                onClick={addItem}
+                disabled={loading}
+                style={{ marginTop: '10px', marginLeft: 0, width: '100%' }}
+              >
+                Add Product
+              </button>
             </div>
 
             <div className="form-section total-section">

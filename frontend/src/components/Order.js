@@ -78,7 +78,7 @@ function Order() {
     fetchData();
   }, []);
 
-  // Synchronize uom_id after products, uoms, or items change
+  // Synchronize uom_id after products or uoms change
   useEffect(() => {
     if (products.length > 0 && uoms.length > 0) {
       const newItems = items.map(item => {
@@ -93,7 +93,7 @@ function Order() {
       setItems(newItems);
       calculateGrandTotal(newItems);
     }
-  }, [products, uoms, items]);
+  }, [products, uoms]); // Removed 'items' from dependencies
 
   const addItem = () => {
     setItems([...items, { product_id: '', quantity: 1, uom_id: '', price: 0, total: 0 }]);

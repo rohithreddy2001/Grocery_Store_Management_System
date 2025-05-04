@@ -181,6 +181,7 @@ function ManageProduct() {
           onClose={handleModalClose}
           onSave={handleModalSave}
           product={selectedProduct}
+          loading={loading}
         />
       )}
     </div>

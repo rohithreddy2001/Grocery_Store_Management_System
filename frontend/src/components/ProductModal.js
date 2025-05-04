@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
-function ProductModal({ onClose, onSave, product }) {
+function ProductModal({ onClose, onSave, product, loading }) {
   const isUpdateMode = !!product;
   const [formData, setFormData] = useState({
     name: product ? product.name : '',
@@ -98,7 +98,7 @@ function ProductModal({ onClose, onSave, product }) {
               Close
             </button>
             <button type="button" className="btn btn-primary" onClick={handleSave}>
-              {isUpdateMode ? 'Update' : 'Save'}
+              {loading ? 'Loading...' : (isUpdateMode ? 'Update' : 'Save')}
             </button>
           </div>
         </div>

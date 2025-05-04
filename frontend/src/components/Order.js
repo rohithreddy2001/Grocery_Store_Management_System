@@ -30,6 +30,7 @@ function Order() {
   const [grandTotal, setGrandTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -155,6 +156,7 @@ function Order() {
       }))
     };
     console.log('Saving order:', requestPayload);
+    setSaving(true);
     fetch(`${API_BASE_URL}/insertOrder`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -169,6 +171,7 @@ function Order() {
         console.log('Server response:', data);
         window.location.reload();
         alert('Order saved successfully!');
+        setSaving(false);
       })
       .catch(error => {
         console.error('Error saving order:', error);
@@ -322,7 +325,7 @@ function Order() {
                   onClick={handleSaveOrder}
                   disabled={loading}
                 >
-                  Save Order
+                  {saving ? 'Order Saving...' : 'Save Order'}
                 </button>
               </div>
             </div>

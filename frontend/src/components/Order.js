@@ -170,9 +170,9 @@ function Order() {
       })
       .then(data => {
         console.log('Server response:', data);
-        // window.location.reload();
         // alert('Order saved successfully!');
         setSuccess('Order saved successfully!');
+        window.location.reload();
         setSaving(false);
       })
       .catch(error => {

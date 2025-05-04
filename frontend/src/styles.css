@@ -103,10 +103,26 @@ body {
   animation: slideIn 0.3s ease-in-out;
 }
 
+.order-notification-success {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 200;
+  background-color: #22c55e;
+  animation: slideIn 0.3s ease-in-out;
+}
+
 @keyframes slideIn {
   from { transform: translateY(-20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
+
 
 .grocery-store-icon {
   width: 50px;

@@ -170,7 +170,7 @@ function Order() {
       })
       .then(data => {
         console.log('Server response:', data);
-        window.location.reload();
+        // window.location.reload();
         // alert('Order saved successfully!');
         setSuccess('Order saved successfully!');
         setSaving(false);
@@ -196,7 +196,11 @@ function Order() {
                 {error}
               </div>
             )}
-            {success && <div className="notification success" style={{ top: '-98px', right: '-6px' }}>{success}</div>}
+            {success && (
+              <div className="notification success order-notification-success">
+                {success}
+              </div>
+            )}
             <Link to="/">
               <button
                 type="button"

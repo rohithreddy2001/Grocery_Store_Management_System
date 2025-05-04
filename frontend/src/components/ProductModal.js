@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
-function ProductModal({ onClose, onSave, product, loading }) {
+function ProductModal({ onClose, onSave, product }) {
   const isUpdateMode = !!product;
   const [formData, setFormData] = useState({
     name: product ? product.name : '',
@@ -25,6 +25,7 @@ function ProductModal({ onClose, onSave, product, loading }) {
   };
 
   const handleSave = () => {
+    console.log("Loading...");
     const requestPayload = {
       product_name: formData.name,
       uom_id: formData.uom_id,
@@ -40,7 +41,12 @@ function ProductModal({ onClose, onSave, product, loading }) {
       .then(() => {
         onSave();
       })
-      .catch(error => console.error(`Error ${isUpdateMode ? 'updating' : 'saving'} product:`, error));
+      .catch(error => console.error(`Error ${isUpdateMode ? 'updating' : 'saving'} product:`, error))
+      .finally(() => {
+        console.log("Loading finished.");
+      }
+    );
+
   };
 
   return (
@@ -98,7 +104,7 @@ function ProductModal({ onClose, onSave, product, loading }) {
               Close
             </button>
             <button type="button" className="btn btn-primary" onClick={handleSave}>
-              {loading ? 'Loading...' : (isUpdateMode ? 'Update' : 'Save')}
+              {isUpdateMode ? 'Update' : 'Save'}
             </button>
           </div>
         </div>

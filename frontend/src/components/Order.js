@@ -31,6 +31,7 @@ function Order() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [success, setSuccess] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -170,7 +171,8 @@ function Order() {
       .then(data => {
         console.log('Server response:', data);
         window.location.reload();
-        alert('Order saved successfully!');
+        // alert('Order saved successfully!');
+        setSuccess('Order saved successfully!');
         setSaving(false);
       })
       .catch(error => {
@@ -191,6 +193,7 @@ function Order() {
                 {error}
               </div>
             )}
+            {success && <div className="notification success" style={{ top: '-98px', right: '-6px' }}>{success}</div>}
             <Link to="/">
               <button
                 type="button"

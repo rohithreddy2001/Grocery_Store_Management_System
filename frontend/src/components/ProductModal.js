@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 const API_BASE_URL = "https://grocery-store-management-system.onrender.com";
 
 function ProductModal({ onClose, onSave, product }) {
+
+  const [loading, setLoading] = useState(false);
+
   const isUpdateMode = !!product;
   const [formData, setFormData] = useState({
     name: product ? product.name : '',
@@ -25,6 +28,7 @@ function ProductModal({ onClose, onSave, product }) {
   };
 
   const handleSave = () => {
+    setLoading(true);
     console.log("Loading...");
     const requestPayload = {
       product_name: formData.name,
@@ -43,6 +47,7 @@ function ProductModal({ onClose, onSave, product }) {
       })
       .catch(error => console.error(`Error ${isUpdateMode ? 'updating' : 'saving'} product:`, error))
       .finally(() => {
+        setLoading(false);
         console.log("Loading finished.");
       }
     );
@@ -104,7 +109,7 @@ function ProductModal({ onClose, onSave, product }) {
               Close
             </button>
             <button type="button" className="btn btn-primary" onClick={handleSave}>
-              {isUpdateMode ? 'Update' : 'Save'}
+              {loading ? 'Loading...' : (isUpdateMode ? 'Update' : 'Save')}
             </button>
           </div>
         </div>

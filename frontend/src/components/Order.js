@@ -170,18 +170,17 @@ function Order() {
       })
       .then(data => {
         console.log('Server response:', data);
-        // alert('Order saved successfully!');
         setSuccess('Order saved successfully!');
-        window.location.reload();
         setSaving(false);
+        setTimeout(() => {
+          setSuccess(null);
+          window.location.reload(); // Reload after success message is displayed
+        }, 4000); // 4 seconds delay
       })
       .catch(error => {
         console.error('Error saving order:', error);
         setError(`Failed to save order: ${error.message}`);
         alert('Failed to save order. Check the page for details.');
-      })
-      .finally(() => {
-        setTimeout(() => setSuccess(null), 4000);
       });
   };
 

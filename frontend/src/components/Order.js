@@ -179,6 +179,9 @@ function Order() {
         console.error('Error saving order:', error);
         setError(`Failed to save order: ${error.message}`);
         alert('Failed to save order. Check the page for details.');
+      })
+      .finally(() => {
+        setTimeout(() => setSuccess(null), 4000);
       });
   };
 

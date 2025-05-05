@@ -62,9 +62,10 @@ function ManageProduct() {
     }
   };
 
-  const handleConfirmDelete = () =>{
-    setConfirmDelete(true);
-  }
+  const handleConfirmDelete = (product) => {
+    setSelectedProduct(product); // Set the selected product
+    setConfirmDelete(true); // Show the confirmation dialog
+  };
 
   const handleUpdate = (product) => {
     setSelectedProduct(product);
@@ -104,15 +105,29 @@ function ManageProduct() {
     <div className="right content-page">
       <div className="body content rows scroll-y">
         {
-            confirmDelete && (
-                <div className="confirm-logout">
-                    <p style={{fontSize: '18px'}}>Are you sure you want to delete this item?</p>
-                    <div className="confirm-logout-buttons">
-                    <button className="btn btn-success" style={{fontSize: '14px'}} onClick={() => setConfirmDelete(false)}>Cancel</button>
-                    <button className="btn btn-danger" style={{fontSize: '14px'}} onClick={(handleDelete)}>Delete</button>
-                    </div>
-                </div>
-            )
+          confirmDelete && (
+            <div className="confirm-logout">
+              <p style={{ fontSize: '18px' }}>
+                Are you sure you want to delete "{selectedProduct?.name}"?
+              </p>
+              <div className="confirm-logout-buttons">
+                <button
+                  className="btn btn-success"
+                  style={{ fontSize: '14px' }}
+                  onClick={() => setConfirmDelete(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-danger"
+                  style={{ fontSize: '14px' }}
+                  onClick={() => handleDelete(selectedProduct.product_id, selectedProduct.name)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          )
         }
         {loading && (
           <div className="loading">
@@ -179,7 +194,7 @@ function ManageProduct() {
                             type="button"
                             className="btn btn-danger"
                             style={{ fontSize: '0.8rem', fontWeight: '500', padding: '4px 8px', minWidth: '60px' }}
-                            onClick={handleConfirmDelete}
+                            onClick={() => handleConfirmDelete(product)}
                           >
                             Delete
                           </button>

@@ -12,6 +12,7 @@ function ManageProduct() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleteStatus, setDeleteStatus] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -51,13 +52,14 @@ function ManageProduct() {
         }
         setProducts(products.filter(product => product.product_id !== productId));
         setFilteredProducts(filteredProducts.filter(product => product.product_id !== productId));
+        setDeleteStatus(true);
         setConfirmDelete(false);
         setSuccess(`Product "${productName}" deleted successfully!`);
-        setTimeout(() => setSuccess(null), 3000);
+        setTimeout(() => setSuccess(null), 4000);
       } catch (err) {
         console.error('Error deleting product:', err);
         setError(err.message);
-        setTimeout(() => setError(null), 3000);
+        setTimeout(() => setError(null), 5000);
         setConfirmDelete(false); // Close the confirmation dialog
       }
     }
@@ -129,7 +131,7 @@ function ManageProduct() {
                   style={{ fontSize: '14px' }}
                   onClick={() => handleDelete(selectedProduct.product_id, selectedProduct.name)}
                 >
-                  {confirmDelete ? "Deleting.." : "Delete"}
+                  {deleteStatus ? "Deleting.." : "Delete"}
                 </button>
               </div>
             </div>

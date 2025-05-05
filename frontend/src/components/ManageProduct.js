@@ -39,6 +39,7 @@ function ManageProduct() {
   }, [searchTerm, products]);
 
   const handleDelete = async (productId, productName) => {
+    setDeleteStatus(true);
     if (confirmDelete) {
       try {
         const response = await fetch(`${API_BASE_URL}/deleteProduct`, {
@@ -52,7 +53,6 @@ function ManageProduct() {
         }
         setProducts(products.filter(product => product.product_id !== productId));
         setFilteredProducts(filteredProducts.filter(product => product.product_id !== productId));
-        setDeleteStatus(true);
         setConfirmDelete(false);
         setSuccess(`Product "${productName}" deleted successfully!`);
         setTimeout(() => setSuccess(null), 4000);
@@ -111,8 +111,7 @@ function ManageProduct() {
 
   return (
     <div className="right content-page">
-      <div className="body content rows scroll-y">
-        {
+      {
           confirmDelete && (
             <div className="confirm-logout">
               <p style={{ fontSize: '18px' }}>
@@ -137,6 +136,8 @@ function ManageProduct() {
             </div>
           )
         }
+      <div className="body content rows scroll-y">
+        
         {loading && (
           <div className="loading">
             <span>Loading...</span>

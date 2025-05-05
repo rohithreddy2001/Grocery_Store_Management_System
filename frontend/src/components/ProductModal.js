@@ -28,30 +28,34 @@ function ProductModal({ onClose, onSave, product }) {
   };
 
   const handleSave = () => {
+    // Validation: Check if all fields are filled
+    if (!formData.name || !formData.uom_id || !formData.price_per_unit) {
+        alert("Please fill all fields before saving.");
+        return;
+    }
+
     setLoading(true);
     console.log("Loading...");
     const requestPayload = {
-      product_name: formData.name,
-      uom_id: formData.uom_id,
-      price_per_unit: formData.price_per_unit,
-      ...(isUpdateMode && { product_id: formData.product_id })
+        product_name: formData.name,
+        uom_id: formData.uom_id,
+        price_per_unit: formData.price_per_unit,
+        ...(isUpdateMode && { product_id: formData.product_id })
     };
     const endpoint = isUpdateMode ? 'updateProduct' : 'insertProduct';
     fetch(`${API_BASE_URL}/${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `data=${JSON.stringify(requestPayload)}`
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `data=${JSON.stringify(requestPayload)}`
     })
-      .then(() => {
-        onSave();
-      })
-      .catch(error => console.error(`Error ${isUpdateMode ? 'updating' : 'saving'} product:`, error))
-      .finally(() => {
-        setLoading(false);
-        console.log("Loading finished.");
-      }
-    );
-
+        .then(() => {
+            onSave();
+        })
+        .catch(error => console.error(`Error ${isUpdateMode ? 'updating' : 'saving'} product:`, error))
+        .finally(() => {
+            setLoading(false);
+            console.log("Loading finished.");
+        });
   };
 
   return (

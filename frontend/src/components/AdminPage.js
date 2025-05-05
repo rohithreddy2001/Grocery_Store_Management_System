@@ -40,7 +40,7 @@ const AdminPage = () => {
     const confirmLogoutHandler = () => {
         setIsAuthenticated(false);
         localStorage.removeItem("isAuthenticated"); // Clear authentication state
-        window.location.reload();
+        window.location.href = "/"; // Redirect to the root path after logout
     };
 
     if (isAuthenticated) {

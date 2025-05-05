@@ -54,6 +54,7 @@ function ManageProduct() {
         setProducts(products.filter(product => product.product_id !== productId));
         setFilteredProducts(filteredProducts.filter(product => product.product_id !== productId));
         setConfirmDelete(false);
+        setDeleteStatus(false);
         setSuccess(`Product "${productName}" deleted successfully!`);
         setTimeout(() => setSuccess(null), 4000);
       } catch (err) {
@@ -61,6 +62,7 @@ function ManageProduct() {
         setError(err.message);
         setTimeout(() => setError(null), 5000);
         setConfirmDelete(false); // Close the confirmation dialog
+        setDeleteStatus(false); // Reset delete status
       }
     }
   };

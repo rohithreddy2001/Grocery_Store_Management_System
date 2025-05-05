@@ -13,6 +13,7 @@ const AdminPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [success, setSuccess] = useState(null);
+    const [confirmLogout, setConfirmLogout] = useState(false);
 
     const adminCredentials = {
         username: "Rohith", 
@@ -33,9 +34,13 @@ const AdminPage = () => {
     };
 
     const handleLogout = () => {
+        setConfirmLogout(true);
+    };
+
+    const confirmLogoutHandler = () => {
         setIsAuthenticated(false);
         localStorage.removeItem("isAuthenticated"); // Clear authentication state
-        window.location.reload(); 
+        window.location.reload();
     };
 
     if (isAuthenticated) {
@@ -45,6 +50,17 @@ const AdminPage = () => {
                 <BrowserRouter>
                     <div className="container">
                         <Navbar handleLogout={handleLogout} />
+                        {
+                            confirmLogout && (
+                                <div className="confirm-logout">
+                                    <p style={{fontSize: '18px'}}>Are you sure you want to logout?</p>
+                                    <div className="confirm-logout-buttons">
+                                    <button className="btn btn-success" style={{fontSize: '14px'}} onClick={() => setConfirmLogout(false)}>Cancel</button>
+                                    <button className="btn btn-danger" style={{fontSize: '14px'}} onClick={(confirmLogoutHandler)}>Logout</button>
+                                    </div>
+                                </div>
+                            )
+                        }
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/manage-product" element={<ManageProduct />} />

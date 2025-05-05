@@ -124,6 +124,21 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
+.admin-notification-success {
+  position: absolute;
+  top: 26px;
+  right: 0;
+  padding: 8px 12px;
+  margin-right: 26px;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 200;
+  background-color: #22c55e;
+  animation: slideIn 0.3s ease-in-out;
+}
+
 
 
 .grocery-store-icon {

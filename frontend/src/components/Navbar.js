@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import headerLogo from '../images/header_logo.jpg';
 
-function Navbar() {
+function Navbar({handleLogout}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -31,6 +31,9 @@ function Navbar() {
                     <Link to="/manage-product">
                       <i className="zmdi zmdi-case zmdi-hc-fw" style={{ fontSize: 32 }} title="Products"></i>
                     </Link>
+                  </li>
+                  <li>
+                  <i className="zmdi zmdi-power zmdi-hc-fw" style={{ color: 'red', cursor: 'Pointer', fontSize: '32px' }} title="Logout" onClick={handleLogout}></i>
                   </li>
                 </ul>
               </div>

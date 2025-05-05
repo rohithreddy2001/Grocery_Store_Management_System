@@ -109,7 +109,7 @@ function ProductModal({ onClose, onSave, product }) {
               Close
             </button>
             <button type="button" className="btn btn-primary" onClick={handleSave}>
-              {loading ? 'Loading...' : (isUpdateMode ? 'Update' : 'Save')}
+              {loading ? (isUpdateMode ? 'Updating..' : 'Saving..') : (isUpdateMode ? 'Update' : 'Save')}
             </button>
           </div>
         </div>

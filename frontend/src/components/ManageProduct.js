@@ -115,11 +115,11 @@ function ManageProduct() {
     <div className="right content-page">
       {
           confirmDelete && (
-            <div className="confirm-logout">
+            <div className="confirm-delete">
               <p style={{ fontSize: '18px' }}>
                 Are you sure you want to delete "{selectedProduct?.name}"?
               </p>
-              <div className="confirm-logout-buttons">
+              <div className="confirm-delete-buttons">
                 <button
                   className="btn btn-success"
                   style={{ fontSize: '14px' }}

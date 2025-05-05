@@ -58,6 +58,7 @@ function ManageProduct() {
         console.error('Error deleting product:', err);
         setError(err.message);
         setTimeout(() => setError(null), 3000);
+        setConfirmDelete(false); // Close the confirmation dialog
       }
     }
   };
@@ -70,6 +71,11 @@ function ManageProduct() {
   const handleUpdate = (product) => {
     setSelectedProduct(product);
     setShowModal(true);
+  };
+
+  const handleAddNewProduct = () => {
+    setSelectedProduct(null); // Reset selected product
+    setShowModal(true); // Open the modal
   };
 
   const handleModalClose = () => {
@@ -123,7 +129,7 @@ function ManageProduct() {
                   style={{ fontSize: '14px' }}
                   onClick={() => handleDelete(selectedProduct.product_id, selectedProduct.name)}
                 >
-                  Delete
+                  {confirmDelete ? "Deleting.." : "Delete"}
                 </button>
               </div>
             </div>
@@ -160,7 +166,7 @@ function ManageProduct() {
                       type="button"
                       className="btn btn-success"
                       style={{ marginLeft: '0px', fontSize: '0.85rem', fontWeight: '500', padding: '6px 12px' }}
-                      onClick={() => setShowModal(true)}
+                      onClick={handleAddNewProduct}
                     >
                       Add New Product
                     </button>

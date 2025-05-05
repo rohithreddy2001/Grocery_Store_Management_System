@@ -11,6 +11,7 @@ function ManageProduct() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -37,7 +38,7 @@ function ManageProduct() {
   }, [searchTerm, products]);
 
   const handleDelete = async (productId, productName) => {
-    if (window.confirm(`Are you sure you want to delete ${productName}?`)) {
+    if (confirmDelete) {
       try {
         const response = await fetch(`${API_BASE_URL}/deleteProduct`, {
           method: 'POST',
@@ -50,6 +51,7 @@ function ManageProduct() {
         }
         setProducts(products.filter(product => product.product_id !== productId));
         setFilteredProducts(filteredProducts.filter(product => product.product_id !== productId));
+        setConfirmDelete(false);
         setSuccess(`Product "${productName}" deleted successfully!`);
         setTimeout(() => setSuccess(null), 3000);
       } catch (err) {
@@ -59,6 +61,10 @@ function ManageProduct() {
       }
     }
   };
+
+  const handleConfirmDelete = () =>{
+    setConfirmDelete(true);
+  }
 
   const handleUpdate = (product) => {
     setSelectedProduct(product);
@@ -97,6 +103,17 @@ function ManageProduct() {
   return (
     <div className="right content-page">
       <div className="body content rows scroll-y">
+        {
+            confirmDelete && (
+                <div className="confirm-logout">
+                    <p style={{fontSize: '18px'}}>Are you sure you want to delete this item?</p>
+                    <div className="confirm-logout-buttons">
+                    <button className="btn btn-success" style={{fontSize: '14px'}} onClick={() => setConfirmDelete(false)}>Cancel</button>
+                    <button className="btn btn-danger" style={{fontSize: '14px'}} onClick={(handleDelete)}>Delete</button>
+                    </div>
+                </div>
+            )
+        }
         {loading && (
           <div className="loading">
             <span>Loading...</span>
@@ -162,7 +179,7 @@ function ManageProduct() {
                             type="button"
                             className="btn btn-danger"
                             style={{ fontSize: '0.8rem', fontWeight: '500', padding: '4px 8px', minWidth: '60px' }}
-                            onClick={() => handleDelete(product.product_id, product.name)}
+                            onClick={handleConfirmDelete}
                           >
                             Delete
                           </button>

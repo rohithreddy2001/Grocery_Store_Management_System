@@ -79,8 +79,7 @@ const AdminPage = () => {
             alignItems: 'center',
             justifyContent: 'center',
             height: '100vh',
-            backgroundColor: '#f4f4f4',
-            opacity: 0.9,
+            backgroundColor: "#FFFFFFE3",
             fontFamily: 'Arial, sans-serif',
             gap: '50px'
         }}>

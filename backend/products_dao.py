@@ -61,7 +61,7 @@ def delete_product(connection, product_id):
     count = cursor.fetchone()[0]
     
     if count > 0:
-        raise DeletionError(f"Cannot delete product with ID {product_id} because it is referenced in existing orders.")
+        raise DeletionError(f"Can't delete id: {product_id} as it is referenced in orders.")
     
     # Proceed with deletion if no dependencies
     query = ("DELETE FROM products WHERE product_id = %s")
